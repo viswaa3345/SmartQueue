@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Validation Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-form { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 10px 0; }
+        input { width: 300px; padding: 8px; margin: 5px 0; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; margin: 5px; }
+        .result { margin: 10px 0; padding: 10px; background: #e9ecef; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Email Validation Debug Test</h2>
+    
+    <div class="test-form">
+        <h3>Test Different Email Formats</h3>
+        <input type="email" id="testEmail" value="test@example.com" placeholder="Enter email to test">
+        <button onclick="testEmailValidation()">Test Email Validation</button>
+        <div id="validationResult" class="result"></div>
+    </div>
+    
+    <div class="test-form">
+        <h3>Test Registration Form Data</h3>
+        <form id="testForm">
+            <input type="text" id="name" value="Test User" placeholder="Name" required><br>
+            <input type="email" id="email" value="user@example.com" placeholder="Email" required><br>
+            <input type="password" id="password" value="test123456" placeholder="Password" required><br>
+            <button type="submit">Test Registration Data</button>
+        </form>
+        <div id="formResult" class="result"></div>
+    </div>
+    
+    <script>
+        function testEmailValidation() {
+            const email = document.getElementById('testEmail').value;
+            const result = document.getElementById('validationResult');
+            
+            result.innerHTML = `
+                <strong>Testing email: "${email}"</strong><br>
+                Email length: ${email.length}<br>
+                Trimmed email: "${email.trim()}"<br>
+                Trimmed length: ${email.trim().length}<br>
+                Character codes: ${email.split('').map(c => c.charCodeAt(0)).join(', ')}<br>
+                Contains spaces: ${email.includes(' ') ? 'Yes' : 'No'}<br>
+                Contains tabs: ${email.includes('\t') ? 'Yes' : 'No'}<br>
+                Contains newlines: ${email.includes('\n') || email.includes('\r') ? 'Yes' : 'No'}<br>
+            `;
+            
+            // Test with JavaScript validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const jsValid = emailRegex.test(email.trim());
+            
+            result.innerHTML += `<br><strong>JavaScript validation: ${jsValid ? 'VALID' : 'INVALID'}</strong>`;
+        }
+        
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const nameValue = document.getElementById('name').value;
+            const emailValue = document.getElementById('email').value;
+            const passwordValue = document.getElementById('password').value;
+            
+            formData.append('name', nameValue);
+            formData.append('email', emailValue);
+            formData.append('password', passwordValue);
+            formData.append('role', 'customer');
+            
+            const result = document.getElementById('formResult');
+            result.innerHTML = `
+                <strong>Form Data Being Sent:</strong><br>
+                Name: "${nameValue}" (length: ${nameValue.length})<br>
+                Email: "${emailValue}" (length: ${emailValue.length})<br>
+                Password: "${passwordValue}" (length: ${passwordValue.length})<br>
+                Role: customer<br><br>
+                <strong>Testing with server...</strong>
+            `;
+            
+            try {
+                const response = await fetch('debug_register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                result.innerHTML += `<br><br><strong>Server Response:</strong><br>`;
+                result.innerHTML += `Success: ${data.success}<br>`;
+                result.innerHTML += `Message: ${data.message}<br>`;
+                
+                if (data.debug) {
+                    result.innerHTML += `<br><strong>Debug Info:</strong><br>`;
+                    data.debug.forEach(item => {
+                        result.innerHTML += `• ${item}<br>`;
+                    });
+                }
+                
+            } catch (error) {
+                result.innerHTML += `<br><strong>Error:</strong> ${error.message}`;
+            }
+        });
+        
+        // Test initial email when page loads
+        window.onload = function() {
+            testEmailValidation();
+        };
+    </script>
+</body>
+</html>

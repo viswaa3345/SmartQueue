@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        input, select { width: 200px; padding: 5px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        #result { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h2>Registration Test Page</h2>
+    
+    <form id="testForm">
+        <div class="form-group">
+            <label>Name:</label><br>
+            <input type="text" id="name" value="Test User" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Email:</label><br>
+            <input type="email" id="email" value="testuser@example.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Password:</label><br>
+            <input type="password" id="password" value="test123" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Role:</label><br>
+            <select id="role">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Admin Key (only for admin):</label><br>
+            <input type="text" id="adminKey" value="ADMIN_2024_SECRET_KEY">
+        </div>
+        
+        <button type="submit">Test Registration</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', document.getElementById('password').value);
+            formData.append('role', document.getElementById('role').value);
+            formData.append('adminKey', document.getElementById('adminKey').value);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing registration...';
+            
+            try {
+                const response = await fetch('auth/register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const text = await response.text();
+                console.log('Raw response:', text);
+                
+                try {
+                    const result = JSON.parse(text);
+                    resultDiv.innerHTML = `
+                        <h3>Response:</h3>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                } catch (jsonError) {
+                    resultDiv.innerHTML = `
+                        <h3>Raw Response (not JSON):</h3>
+                        <pre>${text}</pre>
+                        <p style="color: red;">JSON Parse Error: ${jsonError.message}</p>
+                    `;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Network Error:</h3>
+                    <p style="color: red;">${error.message}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

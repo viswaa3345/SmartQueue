@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Registration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        input, select { width: 300px; padding: 8px; margin: 5px 0; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; margin: 10px 0; }
+        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; background: #f9f9f9; }
+        .debug { background: #e9ecef; padding: 10px; margin: 10px 0; border-left: 4px solid #007bff; }
+    </style>
+</head>
+<body>
+    <h2>Direct Registration Test</h2>
+    
+    <form id="testForm">
+        <div class="form-group">
+            <label>Name:</label><br>
+            <input type="text" id="name" value="Test Customer" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Email:</label><br>
+            <input type="email" id="email" value="testcust@example.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Password:</label><br>
+            <input type="password" id="password" value="test123456" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Role:</label><br>
+            <select id="role">
+                <option value="customer" selected>Customer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Admin Key (only for admin):</label><br>
+            <input type="text" id="adminKey" value="ADMIN_2024_SECRET_KEY">
+        </div>
+        
+        <button type="submit">Test Registration</button>
+        <button type="button" onclick="testDatabaseFirst()">Test Database First</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        async function testDatabaseFirst() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing database connection...';
+            
+            try {
+                const response = await fetch('test_db.php');
+                const html = await response.text();
+                resultDiv.innerHTML = `<h3>Database Test Results:</h3>${html}`;
+            } catch (error) {
+                resultDiv.innerHTML = `<h3>Database Test Error:</h3><p style="color: red;">${error.message}</p>`;
+            }
+        }
+        
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', document.getElementById('password').value);
+            formData.append('role', document.getElementById('role').value);
+            formData.append('adminKey', document.getElementById('adminKey').value);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing registration...';
+            
+            try {
+                const response = await fetch('debug_register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const text = await response.text();
+                console.log('Raw response:', text);
+                
+                try {
+                    const result = JSON.parse(text);
+                    
+                    let html = `<h3>Registration Result:</h3>`;
+                    html += `<p><strong>Success:</strong> ${result.success}</p>`;
+                    html += `<p><strong>Message:</strong> ${result.message}</p>`;
+                    
+                    if (result.debug && result.debug.length > 0) {
+                        html += `<div class="debug"><h4>Debug Information:</h4><ul>`;
+                        result.debug.forEach(item => {
+                            html += `<li>${item}</li>`;
+                        });
+                        html += `</ul></div>`;
+                    }
+                    
+                    if (result.user_id) {
+                        html += `<p><strong>User ID:</strong> ${result.user_id}</p>`;
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                    
+                } catch (jsonError) {
+                    resultDiv.innerHTML = `
+                        <h3>Raw Response (JSON Parse Failed):</h3>
+                        <pre>${text}</pre>
+                        <p style="color: red;">JSON Error: ${jsonError.message}</p>
+                    `;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Network Error:</h3>
+                    <p style="color: red;">${error.message}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

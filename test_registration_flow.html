@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration and Login Flow Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #cce7ff; color: #004085; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        input { padding: 8px; margin: 5px; width: 200px; }
+        .form-group { margin: 10px 0; }
+        label { display: inline-block; width: 120px; }
+    </style>
+</head>
+<body>
+    <h1>Registration and Login Flow Test</h1>
+    
+    <div class="test-section">
+        <h2>Step 1: Database Check</h2>
+        <button onclick="checkDatabase()">Check Database Status</button>
+        <div id="db-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Step 2: Register New Customer</h2>
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" id="reg-name" value="Test User" />
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="reg-email" value="testuser@example.com" />
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="reg-password" value="test123" />
+        </div>
+        <div class="form-group">
+            <label>Role:</label>
+            <select id="reg-role">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Admin Key:</label>
+            <input type="text" id="reg-adminkey" value="ADMIN_2024_SECRET_KEY" />
+        </div>
+        <button onclick="testRegistration()">Register User</button>
+        <div id="reg-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Step 3: Test Login with Registered User</h2>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="login-email" value="testuser@example.com" />
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="login-password" value="test123" />
+        </div>
+        <div class="form-group">
+            <label>Role:</label>
+            <select id="login-role">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <button onclick="testLogin()">Test Login</button>
+        <div id="login-results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Step 4: Check User in Database</h2>
+        <button onclick="checkUsers()">View All Users</button>
+        <div id="users-results"></div>
+    </div>
+    
+    <script>
+        function log(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            element.appendChild(div);
+        }
+        
+        function checkDatabase() {
+            log('db-results', 'Checking database status...');
+            fetch('check_database.php')
+            .then(response => response.text())
+            .then(html => {
+                if (html.includes('✅')) {
+                    log('db-results', '✅ Database check completed', 'success');
+                } else {
+                    log('db-results', '❌ Database issues found', 'error');
+                }
+                // Show details in a new window
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(html);
+            })
+            .catch(error => {
+                log('db-results', `❌ Database check failed: ${error.message}`, 'error');
+            });
+        }
+        
+        function testRegistration() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
+            const adminKey = document.getElementById('reg-adminkey').value;
+            
+            log('reg-results', `Registering user: ${name} (${email}) as ${role}...`);
+            
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('role', role);
+            if (role === 'admin') {
+                formData.append('adminKey', adminKey);
+            }
+            
+            fetch('simple_register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
+                log('reg-results', `Raw response: ${text}`);
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        log('reg-results', `✅ Registration successful! User ID: ${data.user_id}`, 'success');
+                        // Update login form with registered credentials
+                        document.getElementById('login-email').value = email;
+                        document.getElementById('login-password').value = password;
+                        document.getElementById('login-role').value = role;
+                    } else {
+                        log('reg-results', `❌ Registration failed: ${data.message}`, 'error');
+                    }
+                } catch (e) {
+                    log('reg-results', `❌ Failed to parse response: ${e.message}`, 'error');
+                }
+            })
+            .catch(error => {
+                log('reg-results', `❌ Network error: ${error.message}`, 'error');
+            });
+        }
+        
+        function testLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const role = document.getElementById('login-role').value;
+            
+            log('login-results', `Testing login for ${email} as ${role}...`);
+            
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('role', role);
+            
+            fetch('debug_login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
+                log('login-results', `Raw response: ${text}`);
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        log('login-results', `✅ Login successful!`, 'success');
+                        log('login-results', `User data: ${JSON.stringify(data.user)}`, 'success');
+                    } else {
+                        log('login-results', `❌ Login failed: ${data.message}`, 'error');
+                    }
+                } catch (e) {
+                    log('login-results', `❌ Failed to parse response: ${e.message}`, 'error');
+                }
+            })
+            .catch(error => {
+                log('login-results', `❌ Network error: ${error.message}`, 'error');
+            });
+        }
+        
+        function checkUsers() {
+            log('users-results', 'Fetching user list...');
+            fetch('check_database.php')
+            .then(response => response.text())
+            .then(html => {
+                if (html.includes('Number of users')) {
+                    const matches = html.match(/Number of users in database: (\d+)/);
+                    if (matches) {
+                        log('users-results', `✅ Found ${matches[1]} users in database`, 'success');
+                    }
+                }
+                // Show full database info in new window
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(html);
+            })
+            .catch(error => {
+                log('users-results', `❌ Error checking users: ${error.message}`, 'error');
+            });
+        }
+    </script>
+</body>
+</html>

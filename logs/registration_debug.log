@@ -1,0 +1,58 @@
+[2025-09-26 07:47:04] REGISTRATION: Registration attempt started
+[2025-09-26 07:47:04] REGISTRATION: Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:47:04] REGISTRATION: Database queue_db ensured to exist
+[2025-09-26 07:47:04] REGISTRATION: Database connection successful
+[2025-09-26 07:47:04] REGISTRATION: Users table ensured to exist
+[2025-09-26 07:47:04] REGISTRATION: Registration data - Name: viswaa, Email: viswaapalanisamy@gmail.com, Role: customer, Password length: 6
+[2025-09-26 07:47:04] REGISTRATION: Cleaned email: viswaapalanisamy@gmail.com
+[2025-09-26 07:47:04] REGISTRATION: Validation passed
+[2025-09-26 07:47:05] REGISTRATION: Password hashed successfully
+[2025-09-26 07:47:05] REGISTRATION: Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'field list'
+[2025-09-26 07:47:12] REGISTRATION: Registration attempt started
+[2025-09-26 07:47:12] REGISTRATION: Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:47:12] REGISTRATION: Database queue_db ensured to exist
+[2025-09-26 07:47:12] REGISTRATION: Database connection successful
+[2025-09-26 07:47:12] REGISTRATION: Users table ensured to exist
+[2025-09-26 07:47:12] REGISTRATION: Registration data - Name: viswaa, Email: viswaapalanisamy@gmail.com, Role: customer, Password length: 6
+[2025-09-26 07:47:12] REGISTRATION: Cleaned email: viswaapalanisamy@gmail.com
+[2025-09-26 07:47:12] REGISTRATION: Validation passed
+[2025-09-26 07:47:12] REGISTRATION: Password hashed successfully
+[2025-09-26 07:47:12] REGISTRATION: Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'field list'
+[2025-09-26 07:58:41] REGISTRATION: Registration attempt started
+[2025-09-26 07:58:41] REGISTRATION: Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:58:41] REGISTRATION: Database queue_db ensured to exist
+[2025-09-26 07:58:41] REGISTRATION: Database connection successful
+[2025-09-26 07:58:41] REGISTRATION: Users table ensured to exist
+[2025-09-26 07:58:41] REGISTRATION: Registration data - Name: viswaa, Email: viswaapalanisamy@gmail.com, Role: admin, Password length: 6
+[2025-09-26 07:58:41] REGISTRATION: Cleaned email: viswaapalanisamy@gmail.com
+[2025-09-26 07:58:41] REGISTRATION: Invalid admin key provided: 654321
+[2025-09-26 07:59:21] REGISTRATION: Registration attempt started
+[2025-09-26 07:59:21] REGISTRATION: Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:59:21] REGISTRATION: Database queue_db ensured to exist
+[2025-09-26 07:59:21] REGISTRATION: Database connection successful
+[2025-09-26 07:59:21] REGISTRATION: Users table ensured to exist
+[2025-09-26 07:59:21] REGISTRATION: Registration data - Name: viswaa, Email: viswaapalanisamy@gmail.com, Role: admin, Password length: 6
+[2025-09-26 07:59:21] REGISTRATION: Cleaned email: viswaapalanisamy@gmail.com
+[2025-09-26 07:59:21] REGISTRATION: Validation passed
+[2025-09-26 07:59:21] REGISTRATION: Password hashed successfully
+[2025-09-26 07:59:21] REGISTRATION: Database error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'viswaapalanisamy@gmail.com' for key 'email'
+[2025-09-26 07:59:29] REGISTRATION: Registration attempt started
+[2025-09-26 07:59:29] REGISTRATION: Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:59:29] REGISTRATION: Database queue_db ensured to exist
+[2025-09-26 07:59:29] REGISTRATION: Database connection successful
+[2025-09-26 07:59:29] REGISTRATION: Users table ensured to exist
+[2025-09-26 07:59:29] REGISTRATION: Registration data - Name: viswaa, Email: viswaapalanisamy@gmail.com, Role: admin, Password length: 6
+[2025-09-26 07:59:29] REGISTRATION: Cleaned email: viswaapalanisamy@gmail.com
+[2025-09-26 07:59:29] REGISTRATION: Validation passed
+[2025-09-26 07:59:29] REGISTRATION: Password hashed successfully
+[2025-09-26 07:59:29] REGISTRATION: Database error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'viswaapalanisamy@gmail.com' for key 'email'
+[2025-09-26 07:59:48] REGISTRATION: Registration attempt started
+[2025-09-26 07:59:48] REGISTRATION: Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:59:48] REGISTRATION: Database queue_db ensured to exist
+[2025-09-26 07:59:48] REGISTRATION: Database connection successful
+[2025-09-26 07:59:48] REGISTRATION: Users table ensured to exist
+[2025-09-26 07:59:48] REGISTRATION: Registration data - Name: viswaa, Email: viswaapalanisamy@gmail.com, Role: admin, Password length: 6
+[2025-09-26 07:59:48] REGISTRATION: Cleaned email: viswaapalanisamy@gmail.com
+[2025-09-26 07:59:48] REGISTRATION: Validation passed
+[2025-09-26 07:59:48] REGISTRATION: Password hashed successfully
+[2025-09-26 07:59:48] REGISTRATION: Database error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'viswaapalanisamy@gmail.com' for key 'email'

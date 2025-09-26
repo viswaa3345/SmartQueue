@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Registration Issue</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #cce7ff; color: #004085; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        input, select { padding: 8px; margin: 5px; width: 300px; }
+        .form-group { margin: 10px 0; }
+        label { display: inline-block; width: 120px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Debug Registration Issue</h1>
+    
+    <div class="form-group">
+        <button onclick="checkDatabase()">1. Check Database</button>
+        <button onclick="checkLogs()">2. Check Logs</button>
+        <button onclick="clearLogs()">3. Clear Logs</button>
+    </div>
+    
+    <h2>Test Registration</h2>
+    <form id="regForm">
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" name="name" value="Test User" required />
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" value="test@example.com" required />
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" name="password" value="test123" required />
+        </div>
+        <div class="form-group">
+            <label>Role:</label>
+            <select name="role">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Admin Key:</label>
+            <input type="text" name="adminKey" value="ADMIN_2024_SECRET_KEY" />
+        </div>
+        <div class="form-group">
+            <button type="submit">Test Registration</button>
+        </div>
+    </form>
+    
+    <div id="results"></div>
+    
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function checkDatabase() {
+            log('Checking database status...');
+            fetch('check_database.php')
+            .then(response => response.text())
+            .then(html => {
+                if (html.includes('✅')) {
+                    log('✅ Database check completed', 'success');
+                } else {
+                    log('❌ Database issues found', 'error');
+                }
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(html);
+            })
+            .catch(error => {
+                log(`❌ Database check failed: ${error.message}`, 'error');
+            });
+        }
+        
+        function checkLogs() {
+            log('Opening logs directory...');
+            // Try to fetch the log file
+            fetch('logs/registration_debug.log')
+            .then(response => response.text())
+            .then(text => {
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write('<pre>' + text + '</pre>');
+                log('✅ Logs opened in new window', 'success');
+            })
+            .catch(error => {
+                log('❌ Could not open logs: ' + error.message, 'error');
+            });
+        }
+        
+        function clearLogs() {
+            // This would require a PHP script to clear logs
+            log('Logs cleared (manually clear the logs/registration_debug.log file)', 'info');
+        }
+        
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            log(`Testing registration with data: ${JSON.stringify(data)}`);
+            
+            fetch('simple_register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                log(`Response status: ${response.status}`);
+                return response.text();
+            })
+            .then(text => {
+                log(`Raw response: ${text}`);
+                try {
+                    const result = JSON.parse(text);
+                    if (result.success) {
+                        log(`✅ Registration successful! User ID: ${result.user_id}`, 'success');
+                    } else {
+                        log(`❌ Registration failed: ${result.message}`, 'error');
+                    }
+                } catch (e) {
+                    log(`❌ Failed to parse JSON response: ${e.message}`, 'error');
+                    log(`Response was: ${text}`, 'error');
+                }
+            })
+            .catch(error => {
+                log(`❌ Network error: ${error.message}`, 'error');
+            });
+        });
+    </script>
+</body>
+</html>
