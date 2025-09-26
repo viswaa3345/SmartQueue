@@ -55,7 +55,7 @@ echo "<div class='test-section'><h2>🔗 Database Connectivity Tests</h2>";
 
 runTest('Database Connection', function() {
     try {
-        $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+        $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return true;
     } catch (PDOException $e) {
@@ -64,7 +64,7 @@ runTest('Database Connection', function() {
 }, 'Verifies database connection to queue_db');
 
 runTest('Tables Exist', function() {
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+    $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
     $tables = ['users', 'food_items', 'tokens'];
     foreach ($tables as $table) {
         $stmt = $pdo->prepare("SHOW TABLES LIKE ?");
@@ -141,28 +141,28 @@ echo "</div>";
 echo "<div class='test-section'><h2>📊 Database Data Tests</h2>";
 
 runTest('Users Table Has Data', function() {
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+    $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
     $stmt = $pdo->query("SELECT COUNT(*) FROM users");
     $count = $stmt->fetchColumn();
     return $count > 0 ? true : "No users found in database";
 }, 'Checks if users table contains data');
 
 runTest('Admin User Exists', function() {
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+    $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ? AND role = 'admin'");
     $stmt->execute(['admin@restaurant.com']);
     return $stmt->fetchColumn() > 0;
 }, 'Verifies default admin account exists');
 
 runTest('Food Items Available', function() {
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+    $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
     $stmt = $pdo->query("SELECT COUNT(*) FROM food_items");
     $count = $stmt->fetchColumn();
     return $count > 0 ? true : "No food items found";
 }, 'Checks if food items are available in database');
 
 runTest('Database Column Structure', function() {
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+    $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
     $stmt = $pdo->query("DESCRIBE users");
     $columns = $stmt->fetchAll(PDO::FETCH_COLUMN);
     $required = ['id', 'name', 'email', 'password', 'role'];
@@ -206,7 +206,7 @@ runTest('Password Hashing Available', function() {
 }, 'Checks if password hashing functions exist');
 
 runTest('PDO Prepared Statements', function() {
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+    $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
     $stmt = $pdo->prepare("SELECT 1");
     return $stmt !== false;
 }, 'Verifies PDO prepared statements work');
@@ -279,7 +279,7 @@ if ($failedTests == 0) {
 
 // Show database statistics
 try {
-    $pdo = new PDO("mysql:host=127.0.0.1;dbname=queue_db;charset=utf8mb4", 'root', '');
+    $pdo = new PDO("mysql:host=127.0.0.1;port=3307;dbname=queue_db;charset=utf8mb4", 'root', '');
     echo "<h3>📊 Current Database Status:</h3>";
     echo "<table style='width: 100%; border-collapse: collapse;'>";
     echo "<tr style='background: #f8f9fa;'><th style='border: 1px solid #ddd; padding: 10px;'>Table</th><th style='border: 1px solid #ddd; padding: 10px;'>Records</th></tr>";

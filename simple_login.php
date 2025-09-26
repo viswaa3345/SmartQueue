@@ -11,6 +11,7 @@ session_start();
 
 // Database connection
 $host = '127.0.0.1';
+$port = '3307';
 $dbname = 'queue_db';
 $username = 'root';
 $password = '';
@@ -38,7 +39,7 @@ try {
     }
     
     // Connect to database
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     // Get user from database - handle missing status column gracefully

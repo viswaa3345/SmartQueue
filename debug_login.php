@@ -33,13 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 try {
     // Database connection
     $host = '127.0.0.1';
+    $port = '3307';
     $dbname = 'queue_db';
     $username = 'root';
     $password = '';
     
-    logError("Attempting database connection to $host/$dbname");
+    logError("Attempting database connection to $host:$port/$dbname");
     
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     logError("Database connection successful");

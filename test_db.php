@@ -3,13 +3,14 @@ echo "<h2>Database Connection Test</h2>";
 
 // Test direct connection
 $host = '127.0.0.1';
+$port = '3307'; // XAMPP MySQL port
 $dbname = 'queue_db';
 $username = 'root';
 $password = '';
 
 echo "<h3>Testing direct connection...</h3>";
 try {
-    $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "✓ MySQL connection successful<br>";
     
@@ -24,7 +25,7 @@ try {
     }
     
     // Connect to the specific database
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "✓ Connected to database '$dbname'<br>";
     
@@ -88,4 +89,4 @@ if (isset($_POST['test_register'])) {
 <h3>Quick Actions:</h3>
 <a href="setup_new.php">Run Database Setup</a> | 
 <a href="register.html">Go to Registration Page</a> | 
-<a href="index.html">Go to Login Page</a>
+<a href="index.php">Go to Login Page</a>

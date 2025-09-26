@@ -56,3 +56,15 @@
 [2025-09-26 07:59:48] REGISTRATION: Validation passed
 [2025-09-26 07:59:48] REGISTRATION: Password hashed successfully
 [2025-09-26 07:59:48] REGISTRATION: Database error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'viswaapalanisamy@gmail.com' for key 'email'
+[2025-09-26 09:53:44] REGISTRATION: Registration attempt started
+[2025-09-26 09:53:44] REGISTRATION: Attempting database connection to 127.0.0.1:3307/queue_db
+[2025-09-26 09:53:44] REGISTRATION: Database queue_db ensured to exist
+[2025-09-26 09:53:44] REGISTRATION: Database connection successful
+[2025-09-26 09:53:44] REGISTRATION: Users table ensured to exist
+[2025-09-26 09:53:44] REGISTRATION: Registration data - Name: Test User, Email: testuser@example.com, Role: customer, Password length: 7
+[2025-09-26 09:53:44] REGISTRATION: Cleaned email: testuser@example.com
+[2025-09-26 09:53:44] REGISTRATION: Validation passed
+[2025-09-26 09:53:44] REGISTRATION: Password hashed successfully
+[2025-09-26 09:53:44] REGISTRATION: Insert with status column successful
+[2025-09-26 09:53:44] REGISTRATION: Registration successful - User ID: 5
+[2025-09-26 09:53:44] REGISTRATION: User verified in database: {"id":5,"name":"Test User","email":"testuser@example.com","password":"$2y$10$x9H6Fl3wgsjEBX0OIrujrOVogTqhQo.LJkoFrXThBzlpYZvaWCk5i","role":"customer","phone":null,"status":"active","created_at":"2025-09-26 15:23:44","last_login":null}

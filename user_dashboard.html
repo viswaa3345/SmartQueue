@@ -329,7 +329,7 @@
                 const result = await response.json();
                 
                 if (!result.authenticated) {
-                    window.location.href = 'index.html';
+                    window.location.href = 'index.php';
                     return;
                 }
                 
@@ -341,7 +341,7 @@
                 document.getElementById('userName').textContent = result.user.name || result.user.username;
             } catch (error) {
                 console.error('Auth check failed:', error);
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
             }
         }
 
@@ -600,10 +600,10 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    window.location.href = 'index.html';
+                    window.location.href = 'index.php';
                 }
             } catch (error) {
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
             }
         }
 
