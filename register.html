@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Smart Queue Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .register-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .role-selector {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .role-option {
+            cursor: pointer;
+            padding: 0.75rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .role-option:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        .role-option.active {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        .admin-key-section {
+            display: none;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .btn-register {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="register-card p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                        <h2 class="fw-bold">Create Account</h2>
+                        <p class="text-muted">Join Smart Queue Restaurant</p>
+                    </div>
+
+                    <!-- Role Selection -->
+                    <div class="role-selector">
+                        <h6 class="mb-3">Select Account Type</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="role-option text-center active" data-role="customer">
+                                    <i class="fas fa-user fa-2x mb-2 text-primary"></i>
+                                    <div class="fw-bold">Customer</div>
+                                    <small class="text-muted">Order & Track Food</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="role-option text-center" data-role="admin">
+                                    <i class="fas fa-user-shield fa-2x mb-2 text-warning"></i>
+                                    <div class="fw-bold">Admin</div>
+                                    <small class="text-muted">Manage Restaurant</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Key Section -->
+                    <div class="admin-key-section" id="adminKeySection">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-key text-warning me-2"></i>
+                            <strong>Admin Registration Key Required</strong>
+                        </div>
+                        <small class="text-muted">Contact system administrator for the admin key.</small>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <form id="registerForm">
+                        <input type="hidden" id="selectedRole" name="role" value="customer">
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-user me-2"></i>Full Name
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Email Address
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                            <div class="form-text">Minimum 6 characters</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Confirm Password
+                            </label>
+                            <input type="password" class="form-control" id="confirmPassword" required>
+                        </div>
+
+                        <div class="mb-3" id="adminKeyInput" style="display: none;">
+                            <label for="adminKey" class="form-label">
+                                <i class="fas fa-key me-2"></i>Admin Key
+                            </label>
+                            <input type="password" class="form-control" id="adminKey" name="adminKey" placeholder="Enter admin registration key">
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-register">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center">
+                        <p class="mb-0">Already have an account? 
+                            <a href="index.php" class="text-decoration-none fw-bold">Sign In</a>
+                        </p>
+                    </div>
+
+                    <!-- Alert Messages -->
+                    <div id="alertMessage" class="alert d-none mt-3" role="alert"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Role selection
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Update hidden input
+                const role = this.dataset.role;
+                document.getElementById('selectedRole').value = role;
+                
+                // Show/hide admin key section
+                const adminKeySection = document.getElementById('adminKeySection');
+                const adminKeyInput = document.getElementById('adminKeyInput');
+                
+                if (role === 'admin') {
+                    adminKeySection.style.display = 'block';
+                    adminKeyInput.style.display = 'block';
+                    document.getElementById('adminKey').required = true;
+                } else {
+                    adminKeySection.style.display = 'none';
+                    adminKeyInput.style.display = 'none';
+                    document.getElementById('adminKey').required = false;
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validate password match
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match', 'danger');
+                return;
+            }
+            
+            // Collect form data
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', password);
+            formData.append('role', document.getElementById('selectedRole').value);
+            
+            if (document.getElementById('selectedRole').value === 'admin') {
+                formData.append('adminKey', document.getElementById('adminKey').value);
+            }
+            
+            // Show loading
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
+            submitBtn.disabled = true;
+            
+            // Send registration request
+            fetch('enhanced_register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Full response:', data);
+                if (data.success) {
+                    showAlert('Registration successful! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.php';
+                    }, 2000);
+                } else {
+                    showAlert(data.message, 'danger');
+                    if (data.debug) {
+                        console.log('Debug info:', data.debug);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Registration error:', error);
+                showAlert('Registration failed. Please try again.', 'danger');
+            })
+            .finally(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+        
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            alertDiv.classList.remove('d-none');
+            
+            // Auto-hide after 5 seconds for non-success messages
+            if (type !== 'success') {
+                setTimeout(() => {
+                    alertDiv.classList.add('d-none');
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>

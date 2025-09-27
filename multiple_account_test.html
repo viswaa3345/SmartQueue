@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multiple Account Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { background: #f8f9fa; padding: 20px; margin: 10px 0; border-radius: 8px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; margin: 5px; }
+        .result { margin: 10px 0; padding: 10px; background: #e9ecef; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h2>Multiple Account Registration Test</h2>
+    <p>This test will try to create multiple accounts with the same email to verify the duplicate check is removed.</p>
+    
+    <div class="test-section">
+        <h3>Test: Register Multiple Accounts with Same Email</h3>
+        <button onclick="createMultipleAccounts()">Create 3 Accounts with Same Email</button>
+        <div id="multipleResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test: Login Functionality</h3>
+        <button onclick="testLogin()">Test Login with Email</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+    
+    <script>
+        async function createMultipleAccounts() {
+            const result = document.getElementById('multipleResult');
+            result.innerHTML = 'Testing multiple account creation...';
+            
+            const testEmail = 'test@example.com';
+            const accounts = [
+                { name: 'John Doe', email: testEmail, password: 'password1', role: 'customer' },
+                { name: 'Jane Smith', email: testEmail, password: 'password2', role: 'customer' },
+                { name: 'Bob Wilson', email: testEmail, password: 'password3', role: 'admin', adminKey: 'ADMIN_2024_SECRET_KEY' }
+            ];
+            
+            let results = [];
+            
+            for (let i = 0; i < accounts.length; i++) {
+                const account = accounts[i];
+                const formData = new FormData();
+                
+                formData.append('name', account.name);
+                formData.append('email', account.email);
+                formData.append('password', account.password);
+                formData.append('role', account.role);
+                if (account.adminKey) {
+                    formData.append('adminKey', account.adminKey);
+                }
+                
+                try {
+                    const response = await fetch('simple_register.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    results.push(`Account ${i+1} (${account.name}): ${data.success ? 'SUCCESS' : 'FAILED - ' + data.message}`);
+                    
+                } catch (error) {
+                    results.push(`Account ${i+1} (${account.name}): ERROR - ${error.message}`);
+                }
+            }
+            
+            result.innerHTML = `
+                <h4>Results:</h4>
+                <ul>
+                    ${results.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+                <p><strong>Expected:</strong> All 3 accounts should be created successfully with the same email.</p>
+            `;
+        }
+        
+        async function testLogin() {
+            const result = document.getElementById('loginResult');
+            result.innerHTML = 'Testing login functionality...';
+            
+            try {
+                const response = await fetch('simple_login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'email=customer@example.com&password=customer123&role=customer'
+                });
+                
+                const data = await response.json();
+                
+                result.innerHTML = `
+                    <h4>Login Test Result:</h4>
+                    <p><strong>Success:</strong> ${data.success}</p>
+                    <p><strong>Message:</strong> ${data.message}</p>
+                    ${data.user ? `<p><strong>User:</strong> ${data.user.name} (${data.user.email})</p>` : ''}
+                `;
+                
+                if (data.success) {
+                    result.classList.add('success');
+                } else {
+                    result.classList.add('error');
+                }
+                
+            } catch (error) {
+                result.innerHTML = `<p class="error">Login test failed: ${error.message}</p>`;
+                result.classList.add('error');
+            }
+        }
+    </script>
+</body>
+</html>

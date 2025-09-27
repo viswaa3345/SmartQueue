@@ -1,0 +1,36 @@
+[2025-09-26 07:38:03] Login attempt started
+[2025-09-26 07:38:03] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:38:03] Database connection successful
+[2025-09-26 07:38:03] Login data - Email: viswaapalanisamy@gmail.com, Role: customer, Password length: 6
+[2025-09-26 07:38:03] Validation passed, querying database
+[2025-09-26 07:38:03] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'where clause'
+[2025-09-26 07:52:10] Login attempt started
+[2025-09-26 07:52:10] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:52:10] Database connection successful
+[2025-09-26 07:52:10] Login data - Email: bairavop@gmail.com, Role: customer, Password length: 6
+[2025-09-26 07:52:10] Validation passed, querying database
+[2025-09-26 07:52:10] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'where clause'
+[2025-09-26 07:56:20] Login attempt started
+[2025-09-26 07:56:20] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:56:20] Database connection successful
+[2025-09-26 07:56:20] Login data - Email: testuser@example.com, Role: customer, Password length: 7
+[2025-09-26 07:56:20] Validation passed, querying database
+[2025-09-26 07:56:20] Query with status column successful
+[2025-09-26 07:56:20] User not found - Email: testuser@example.com, Role: customer
+[2025-09-26 07:56:20] User exists but with different role: 
+[2025-09-26 07:56:50] Login attempt started
+[2025-09-26 07:56:50] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:56:50] Database connection successful
+[2025-09-26 07:56:50] Login data - Email: testuser@example.com, Role: admin, Password length: 7
+[2025-09-26 07:56:50] Validation passed, querying database
+[2025-09-26 07:56:50] Query with status column successful
+[2025-09-26 07:56:50] User not found - Email: testuser@example.com, Role: admin
+[2025-09-26 07:56:50] User exists but with different role: 
+[2025-09-26 07:56:54] Login attempt started
+[2025-09-26 07:56:54] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-26 07:56:54] Database connection successful
+[2025-09-26 07:56:54] Login data - Email: testuser@example.com, Role: customer, Password length: 7
+[2025-09-26 07:56:54] Validation passed, querying database
+[2025-09-26 07:56:54] Query with status column successful
+[2025-09-26 07:56:54] User not found - Email: testuser@example.com, Role: customer
+[2025-09-26 07:56:54] User exists but with different role: 

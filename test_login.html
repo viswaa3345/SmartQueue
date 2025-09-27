@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #cce7ff; color: #004085; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Login System Test</h1>
+    
+    <div id="results"></div>
+    
+    <h2>Test Default Login</h2>
+    <button onclick="testLogin('admin@restaurant.com', 'admin123', 'admin')">Test Admin Login</button>
+    <button onclick="testLogin('customer@example.com', 'customer123', 'customer')">Test Customer Login</button>
+    <button onclick="checkDatabase()">Check Database</button>
+    
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function testLogin(email, password, role) {
+            log(`Testing login for ${email} as ${role}...`);
+            
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('role', role);
+            
+            fetch('simple_login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                log(`Response status: ${response.status}`);
+                return response.text();
+            })
+            .then(text => {
+                log(`Raw response: ${text}`);
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        log(`✅ Login successful for ${email}`, 'success');
+                        log(`User data: ${JSON.stringify(data.user)}`, 'success');
+                    } else {
+                        log(`❌ Login failed: ${data.message}`, 'error');
+                    }
+                } catch (e) {
+                    log(`❌ Failed to parse response as JSON: ${e.message}`, 'error');
+                    log(`Response was: ${text}`, 'error');
+                }
+            })
+            .catch(error => {
+                log(`❌ Network error: ${error.message}`, 'error');
+            });
+        }
+        
+        function checkDatabase() {
+            log('Checking database connection...');
+            fetch('check_database.php')
+            .then(response => response.text())
+            .then(html => {
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(html);
+                log('✅ Database check opened in new window', 'success');
+            })
+            .catch(error => {
+                log(`❌ Database check failed: ${error.message}`, 'error');
+            });
+        }
+        
+        // Auto-run database check on page load
+        window.onload = function() {
+            log('Page loaded. Click buttons to test login or check database.');
+        };
+    </script>
+</body>
+</html>

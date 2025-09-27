@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SmartQueue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .input-group-text {
+            background: transparent;
+            border-right: none;
+        }
+        .form-control {
+            border-left: none;
+            border-radius: 0 25px 25px 0;
+        }
+        .form-control:first-child {
+            border-radius: 25px 0 0 25px;
+            border-right: none;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        .validation-message {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .strength-indicator {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 5px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card">
+                    <div class="card-header text-center bg-primary text-white" style="border-radius: 15px 15px 0 0;">
+                        <h3><i class="fas fa-user-plus"></i> Create Account</h3>
+                        <p class="mb-0">Join SmartQueue today</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="alertContainer"></div>
+                        
+                        <form id="registerForm" method="POST">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                <div id="usernameValidation" class="validation-message"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div id="nameValidation" class="validation-message"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div id="emailValidation" class="validation-message"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                </div>
+                                <div id="phoneValidation" class="validation-message"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="strength-indicator" id="strengthIndicator"></div>
+                                <div id="passwordValidation" class="validation-message"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                </div>
+                                <div id="confirmPasswordValidation" class="validation-message"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                    <select class="form-select" id="role" name="role" style="border-left: none;">
+                                        <option value="customer">Customer</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the <a href="#" class="text-primary">Terms of Service</a> and 
+                                    <a href="#" class="text-primary">Privacy Policy</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 mb-3" id="submitBtn">
+                                <i class="fas fa-user-plus"></i> Create Account
+                            </button>
+                        </form>
+
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account? 
+                                <a href="test_login.html" class="text-primary">Sign In</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation and interaction handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registerForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Real-time validation
+            const fields = ['username', 'name', 'email', 'phone', 'password', 'confirmPassword'];
+            
+            fields.forEach(field => {
+                const input = document.getElementById(field);
+                input.addEventListener('input', () => validateField(field));
+                input.addEventListener('blur', () => validateField(field));
+            });
+
+            // Password visibility toggle
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+
+            // Form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!validateForm()) {
+                    return;
+                }
+                
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+                submitBtn.disabled = true;
+                
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch('api/register_enhanced.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showAlert('success', result.message || 'Account created successfully!');
+                        setTimeout(() => {
+                            window.location.href = 'test_login.html';
+                        }, 2000);
+                    } else {
+                        showAlert('danger', result.message || 'Registration failed. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showAlert('danger', 'Network error. Please check your connection and try again.');
+                } finally {
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                    submitBtn.disabled = false;
+                }
+            });
+
+            function validateField(fieldName) {
+                const field = document.getElementById(fieldName);
+                const validation = document.getElementById(fieldName + 'Validation');
+                const value = field.value.trim();
+                
+                let isValid = true;
+                let message = '';
+                
+                switch (fieldName) {
+                    case 'username':
+                        if (value.length < 3) {
+                            isValid = false;
+                            message = 'Username must be at least 3 characters long';
+                        } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+                            isValid = false;
+                            message = 'Username can only contain letters, numbers, and underscores';
+                        }
+                        break;
+                        
+                    case 'name':
+                        if (value.length < 2) {
+                            isValid = false;
+                            message = 'Name must be at least 2 characters long';
+                        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+                            isValid = false;
+                            message = 'Name can only contain letters and spaces';
+                        }
+                        break;
+                        
+                    case 'email':
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(value)) {
+                            isValid = false;
+                            message = 'Please enter a valid email address';
+                        }
+                        break;
+                        
+                    case 'phone':
+                        const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                        if (!phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''))) {
+                            isValid = false;
+                            message = 'Please enter a valid phone number';
+                        }
+                        break;
+                        
+                    case 'password':
+                        const strength = checkPasswordStrength(value);
+                        updatePasswordStrengthIndicator(strength);
+                        
+                        if (value.length < 8) {
+                            isValid = false;
+                            message = 'Password must be at least 8 characters long';
+                        } else if (strength.score < 2) {
+                            isValid = false;
+                            message = 'Password is too weak. Include uppercase, lowercase, numbers, and special characters';
+                        }
+                        
+                        // Also validate confirm password if it has value
+                        const confirmPassword = document.getElementById('confirmPassword');
+                        if (confirmPassword.value) {
+                            validateField('confirmPassword');
+                        }
+                        break;
+                        
+                    case 'confirmPassword':
+                        const password = document.getElementById('password').value;
+                        if (value !== password) {
+                            isValid = false;
+                            message = 'Passwords do not match';
+                        }
+                        break;
+                }
+                
+                validation.textContent = message;
+                validation.className = `validation-message text-${isValid ? 'success' : 'danger'}`;
+                field.classList.toggle('is-valid', isValid && value !== '');
+                field.classList.toggle('is-invalid', !isValid && value !== '');
+                
+                return isValid;
+            }
+
+            function checkPasswordStrength(password) {
+                let score = 0;
+                const checks = {
+                    length: password.length >= 8,
+                    lowercase: /[a-z]/.test(password),
+                    uppercase: /[A-Z]/.test(password),
+                    numbers: /\d/.test(password),
+                    special: /[^A-Za-z0-9]/.test(password)
+                };
+                
+                score = Object.values(checks).filter(Boolean).length;
+                
+                return { score, checks };
+            }
+
+            function updatePasswordStrengthIndicator(strength) {
+                const indicator = document.getElementById('strengthIndicator');
+                const colors = ['#dc3545', '#fd7e14', '#ffc107', '#28a745', '#20c997'];
+                const widths = ['20%', '40%', '60%', '80%', '100%'];
+                
+                indicator.style.backgroundColor = colors[strength.score - 1] || '#e9ecef';
+                indicator.style.width = widths[strength.score - 1] || '0%';
+            }
+
+            function validateForm() {
+                let isValid = true;
+                
+                fields.forEach(field => {
+                    if (!validateField(field)) {
+                        isValid = false;
+                    }
+                });
+                
+                const agreeTerms = document.getElementById('agreeTerms');
+                if (!agreeTerms.checked) {
+                    showAlert('warning', 'Please agree to the Terms of Service and Privacy Policy');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+
+            function showAlert(type, message) {
+                const alertContainer = document.getElementById('alertContainer');
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type} alert-dismissible fade show`;
+                alert.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                alertContainer.innerHTML = '';
+                alertContainer.appendChild(alert);
+                
+                // Auto-dismiss success alerts
+                if (type === 'success') {
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 5000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

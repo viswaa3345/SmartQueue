@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Queue - Customer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b35 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: #ff6b35 !important;
+            font-size: 1.5rem;
+        }
+        
+        .container-main {
+            padding: 20px 0;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+            border: none;
+        }
+        
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .food-item {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+        }
+        
+        .food-item:hover, .food-item.selected {
+            border-color: #ff6b35;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.2);
+        }
+        
+        .food-item.selected {
+            background: #fff5f2;
+        }
+        
+        .food-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .food-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .food-price {
+            color: #ff6b35;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .food-prep-time {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .token-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .token-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .token-status {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .queue-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .queue-info-item {
+            text-align: center;
+        }
+        
+        .queue-info-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .queue-info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .quantity-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-weight: 600;
+        }
+        
+        .quantity-input {
+            border: 2px solid #ff6b35;
+            border-radius: 8px;
+            width: 80px;
+            text-align: center;
+            margin: 0 15px;
+            padding: 8px;
+        }
+        
+        .alert {
+            border-radius: 12px;
+        }
+        
+        .location-info {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .no-token {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-utensils"></i> Smart Queue
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Welcome, <span id="userName">Customer</span>!</span>
+                <button class="btn btn-outline-danger btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container container-main">
+        <div class="row">
+            <!-- Current Token Status -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-ticket-alt"></i> Your Current Token</h5>
+                    </div>
+                    <div class="card-body" id="currentTokenContainer">
+                        <div class="loading" id="tokenLoading">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                            <p class="mt-2">Loading token status...</p>
+                        </div>
+                        <div class="no-token" id="noTokenMessage" style="display: none;">
+                            <i class="fas fa-ticket-alt fa-3x mb-3" style="color: #ddd;"></i>
+                            <p>You don't have any active token.</p>
+                            <p>Book a token from the menu to get started!</p>
+                        </div>
+                        <div id="tokenInfo" style="display: none;">
+                            <!-- Token info will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Menu -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-hamburger"></i> Food Menu</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="alertContainer"></div>
+                        
+                        <div class="loading" id="menuLoading">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                            <p class="mt-2">Loading menu...</p>
+                        </div>
+                        
+                        <div id="foodMenu" style="display: none;">
+                            <!-- Food items will be populated here -->
+                        </div>
+                        
+                        <div id="bookingSection" style="display: none;">
+                            <hr>
+                            <h6>Selected Item: <span id="selectedItemName"></span></h6>
+                            <div class="quantity-selector">
+                                <button type="button" class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                                <input type="number" class="quantity-input" id="quantity" value="1" min="1" max="10" readonly>
+                                <button type="button" class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary" onclick="bookToken()">
+                                    <i class="fas fa-plus"></i> Book Token
+                                </button>
+                                <button class="btn btn-secondary ms-2" onclick="cancelSelection()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Status -->
+        <div class="row">
+            <div class="col-12">
+                <div class="location-info" id="locationInfo" style="display: none;">
+                    <h6><i class="fas fa-map-marker-alt"></i> Location Status</h6>
+                    <p id="locationStatus">Getting your location...</p>
+                    <button class="btn btn-sm btn-outline-primary" onclick="updateLocation()">
+                        <i class="fas fa-sync"></i> Update Location
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedFoodItem = null;
+        let currentToken = null;
+        let userLocation = null;
+
+        // Check authentication on load
+        window.addEventListener('load', function() {
+            checkAuth();
+            loadFoodMenu();
+            loadCurrentToken();
+            requestLocation();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(() => {
+                loadCurrentToken();
+            }, 30000);
+        });
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('api/check_session.php');
+                const result = await response.json();
+                
+                if (!result.authenticated) {
+                    window.location.href = 'index.php';
+                    return;
+                }
+                
+                if (result.user.role !== 'customer') {
+                    window.location.href = 'admin_dashboard.html';
+                    return;
+                }
+                
+                document.getElementById('userName').textContent = result.user.name || result.user.username;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'index.php';
+            }
+        }
+
+        async function loadFoodMenu() {
+            try {
+                const response = await fetch('api/food_items.php');
+                const result = await response.json();
+                
+                document.getElementById('menuLoading').style.display = 'none';
+                
+                if (result.success) {
+                    displayFoodMenu(result.items);
+                } else {
+                    showAlert('danger', 'Failed to load menu');
+                }
+            } catch (error) {
+                document.getElementById('menuLoading').style.display = 'none';
+                showAlert('danger', 'Error loading menu');
+            }
+        }
+
+        function displayFoodMenu(items) {
+            const menuContainer = document.getElementById('foodMenu');
+            let html = '';
+            
+            const categories = [...new Set(items.map(item => item.category))];
+            
+            categories.forEach(category => {
+                if (category) {
+                    html += `<h6 class="mt-3 mb-2 text-primary">${category}</h6>`;
+                }
+                
+                items.filter(item => item.category === category).forEach(item => {
+                    html += `
+                        <div class="food-item" onclick="selectFoodItem(${item.id}, '${item.name}')">
+                            <div class="food-name">${item.name}</div>
+                            <div class="food-description">${item.description}</div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="food-price">$${parseFloat(item.price).toFixed(2)}</span>
+                                <span class="food-prep-time">
+                                    <i class="fas fa-clock"></i> ${item.preparation_time} min
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            
+            menuContainer.innerHTML = html;
+            menuContainer.style.display = 'block';
+        }
+
+        async function loadCurrentToken() {
+            try {
+                const response = await fetch('api/book_token.php');
+                const result = await response.json();
+                
+                document.getElementById('tokenLoading').style.display = 'none';
+                
+                if (result.success && result.tokens.length > 0) {
+                    const activeToken = result.tokens.find(token => token.status === 'active');
+                    if (activeToken) {
+                        currentToken = activeToken;
+                        displayCurrentToken(activeToken);
+                    } else {
+                        showNoToken();
+                    }
+                } else {
+                    showNoToken();
+                }
+            } catch (error) {
+                document.getElementById('tokenLoading').style.display = 'none';
+                showNoToken();
+            }
+        }
+
+        function displayCurrentToken(token) {
+            const tokenInfo = document.getElementById('tokenInfo');
+            const statusColors = {
+                'active': 'success',
+                'called': 'warning',
+                'completed': 'info',
+                'cancelled': 'danger'
+            };
+            
+            const color = statusColors[token.status] || 'secondary';
+            
+            tokenInfo.innerHTML = `
+                <div class="token-card bg-${color}">
+                    <div class="token-number">${token.token_number}</div>
+                    <div class="token-status">${token.food_name} (x${token.quantity})</div>
+                    <div class="mb-2">Status: ${token.status.toUpperCase()}</div>
+                    <div class="queue-info">
+                        <div class="queue-info-item">
+                            <div class="queue-info-value">${token.estimated_time || 'N/A'}</div>
+                            <div class="queue-info-label">Est. Time (min)</div>
+                        </div>
+                        <div class="queue-info-item">
+                            <div class="queue-info-value" id="queuePosition">-</div>
+                            <div class="queue-info-label">Queue Position</div>
+                        </div>
+                    </div>
+                    ${token.status === 'active' ? `
+                        <div class="mt-3">
+                            <button class="btn btn-danger btn-sm" onclick="cancelToken(${token.id})">
+                                <i class="fas fa-times"></i> Cancel Token
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            tokenInfo.style.display = 'block';
+            document.getElementById('noTokenMessage').style.display = 'none';
+        }
+
+        function showNoToken() {
+            document.getElementById('tokenInfo').style.display = 'none';
+            document.getElementById('noTokenMessage').style.display = 'block';
+        }
+
+        function selectFoodItem(id, name) {
+            if (currentToken && currentToken.status === 'active') {
+                showAlert('warning', 'You already have an active token. Please wait for it to be processed or cancel it first.');
+                return;
+            }
+            
+            // Clear previous selections
+            document.querySelectorAll('.food-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Mark selected item
+            event.currentTarget.classList.add('selected');
+            
+            selectedFoodItem = id;
+            document.getElementById('selectedItemName').textContent = name;
+            document.getElementById('bookingSection').style.display = 'block';
+            document.getElementById('quantity').value = 1;
+        }
+
+        function cancelSelection() {
+            document.querySelectorAll('.food-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            selectedFoodItem = null;
+            document.getElementById('bookingSection').style.display = 'none';
+        }
+
+        function changeQuantity(change) {
+            const quantityInput = document.getElementById('quantity');
+            let newValue = parseInt(quantityInput.value) + change;
+            
+            if (newValue >= 1 && newValue <= 10) {
+                quantityInput.value = newValue;
+            }
+        }
+
+        async function bookToken() {
+            if (!selectedFoodItem) {
+                showAlert('warning', 'Please select a food item first');
+                return;
+            }
+            
+            const quantity = parseInt(document.getElementById('quantity').value);
+            
+            const tokenData = {
+                food_item_id: selectedFoodItem,
+                quantity: quantity,
+                latitude: userLocation?.latitude,
+                longitude: userLocation?.longitude
+            };
+            
+            try {
+                const response = await fetch('api/book_token.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(tokenData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('success', `Token ${result.token.token_number} booked successfully!`);
+                    cancelSelection();
+                    loadCurrentToken();
+                } else {
+                    showAlert('danger', result.error);
+                }
+            } catch (error) {
+                showAlert('danger', 'Error booking token. Please try again.');
+            }
+        }
+
+        async function cancelToken(tokenId) {
+            if (!confirm('Are you sure you want to cancel this token?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('api/cancel_token.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token_id: tokenId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('success', 'Token cancelled successfully');
+                    loadCurrentToken();
+                } else {
+                    showAlert('danger', result.error);
+                }
+            } catch (error) {
+                showAlert('danger', 'Error cancelling token');
+            }
+        }
+
+        function requestLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        userLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+                        
+                        document.getElementById('locationInfo').style.display = 'block';
+                        document.getElementById('locationStatus').textContent = 
+                            `Location detected: ${userLocation.latitude.toFixed(6)}, ${userLocation.longitude.toFixed(6)}`;
+                    },
+                    error => {
+                        document.getElementById('locationInfo').style.display = 'block';
+                        document.getElementById('locationStatus').textContent = 
+                            'Location access denied. Some features may be limited.';
+                    }
+                );
+            }
+        }
+
+        function updateLocation() {
+            requestLocation();
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('api/logout.php', {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.location.href = 'index.php';
+                }
+            } catch (error) {
+                window.location.href = 'index.php';
+            }
+        }
+
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            // Auto-hide success alerts
+            if (type === 'success') {
+                setTimeout(() => {
+                    const alert = alertContainer.querySelector('.alert');
+                    if (alert) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
