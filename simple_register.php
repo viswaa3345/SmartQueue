@@ -22,6 +22,7 @@ logDebug("Registration request started");
 
 // Database connection
 $host = '127.0.0.1';
+$port = '3307';
 $dbname = 'queue_db';
 $username = 'root';
 $password = '';
@@ -79,7 +80,7 @@ try {
     logDebug("Validation passed, connecting to database");
     
     // Connect to database
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     logDebug("Database connection successful");

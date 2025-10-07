@@ -406,6 +406,7 @@
                 const result = await response.json();
                 
                 if (!result.authenticated) {
+<<<<<<< HEAD
                     // Try to restore session from localStorage
                     const currentUser = localStorage.getItem('currentUser');
                     if (currentUser) {
@@ -437,6 +438,9 @@
                     
                     // If session restore fails, redirect to login
                     window.location.href = 'index.html';
+=======
+                    window.location.href = 'index.php';
+>>>>>>> 0517c16aa71673fba94073bde772fb46b57d937a
                     return;
                 }
                 
@@ -448,7 +452,7 @@
                 document.getElementById('adminName').textContent = result.user.name || result.user.username;
             } catch (error) {
                 console.error('Auth check failed:', error);
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
             }
         }
 
@@ -785,10 +789,10 @@
                 const response = await fetch('api/logout.php', { method: 'POST' });
                 const result = await response.json();
                 if (result.success) {
-                    window.location.href = 'index.html';
+                    window.location.href = 'index.php';
                 }
             } catch (error) {
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
             }
         }
 

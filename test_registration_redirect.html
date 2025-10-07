@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Registration Redirect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+    <div class="container">
+        <h2>Test Registration and Redirect</h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quick Registration Test</h5>
+                <form id="quickRegForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="Test User 2">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="testuser2@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" value="test123">
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select class="form-control" id="role" name="role">
+                            <option value="customer" selected>Customer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Test Registration</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Test Results</h5>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('quickRegForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const results = document.getElementById('results');
+            
+            results.innerHTML = '<p class="text-info">Testing registration...</p>';
+            
+            fetch('enhanced_register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Registration response:', data);
+                
+                if (data.success) {
+                    results.innerHTML = `
+                        <div class="alert alert-success">
+                            <h6>✅ Registration Successful!</h6>
+                            <p>Message: ${data.message}</p>
+                            <p>User ID: ${data.user_id}</p>
+                            <p><strong>Note:</strong> In the actual form, this would redirect to index.php after 2 seconds</p>
+                            <a href="index.php" class="btn btn-success">Go to Main Page</a>
+                        </div>
+                    `;
+                } else {
+                    results.innerHTML = `
+                        <div class="alert alert-danger">
+                            <h6>❌ Registration Failed</h6>
+                            <p>${data.message}</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Registration error:', error);
+                results.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6>❌ Network Error</h6>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

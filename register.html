@@ -154,7 +154,7 @@
 
                     <div class="text-center">
                         <p class="mb-0">Already have an account? 
-                            <a href="index.html" class="text-decoration-none fw-bold">Sign In</a>
+                            <a href="index.php" class="text-decoration-none fw-bold">Sign In</a>
                         </p>
                     </div>
 
@@ -237,7 +237,7 @@
                 if (data.success) {
                     showAlert('Registration successful! Redirecting to login...', 'success');
                     setTimeout(() => {
-                        window.location.href = 'index.html';
+                        window.location.href = 'index.php';
                     }, 2000);
                 } else {
                     showAlert(data.message, 'danger');
