@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Item Save Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>🧪 Food Item Save Testing</h1>
+        
+        <div class="test-section">
+            <h3>1. Admin Authentication Test</h3>
+            <div id="authTest">
+                <button class="btn btn-primary" onclick="testAdminAuth()">Test Admin Login</button>
+                <div id="authResults"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Food Item API Test</h3>
+            <div id="apiTest">
+                <button class="btn btn-success" onclick="testFoodAPI()">Test Food API</button>
+                <div id="apiResults"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Add New Food Item Test</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="testFoodForm">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="testName" value="Test Pizza">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="testDescription">Delicious test pizza</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="number" step="0.01" class="form-control" id="testPrice" value="12.99">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <input type="text" class="form-control" id="testCategory" value="Test Category">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Prep Time (minutes)</label>
+                            <input type="number" class="form-control" id="testPrepTime" value="15">
+                        </div>
+                        <button type="button" class="btn btn-warning" onclick="addTestFood()">Add Test Food Item</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div id="addResults"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. Current Food Items</h3>
+            <button class="btn btn-info" onclick="loadCurrentItems()">Load Current Items</button>
+            <div id="currentItems"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>5. Admin Dashboard Integration Test</h3>
+            <button class="btn btn-secondary" onclick="testDashboardSave()">Test Dashboard Save Function</button>
+            <div id="dashboardResults"></div>
+        </div>
+        
+        <div class="mt-4">
+            <a href="admin_dashboard.html" class="btn btn-primary">← Back to Admin Dashboard</a>
+            <a href="debug_food_save.php" class="btn btn-secondary">View Debug Info</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Test admin authentication
+        async function testAdminAuth() {
+            const resultsDiv = document.getElementById('authResults');
+            resultsDiv.innerHTML = '<div class="info">Testing admin authentication...</div>';
+            
+            try {
+                // First try to login as admin
+                const loginResponse = await fetch('auth/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'email=admin@restaurant.com&password=admin123&role=admin'
+                });
+                
+                const loginResult = await loginResponse.json();
+                
+                if (loginResult.success) {
+                    resultsDiv.innerHTML += '<div class="success">✅ Admin login successful!</div>';
+                    
+                    // Store in localStorage
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: loginResult.user.id,
+                        email: loginResult.user.email,
+                        name: loginResult.user.name,
+                        role: loginResult.user.role,
+                        selectedRole: 'admin'
+                    }));
+                    
+                    // Test session check
+                    const sessionResponse = await fetch('api/check_session.php');
+                    const sessionResult = await sessionResponse.json();
+                    
+                    if (sessionResult.success) {
+                        resultsDiv.innerHTML += '<div class="success">✅ Session check passed</div>';
+                        resultsDiv.innerHTML += '<div class="info">User: ' + sessionResult.user.name + ' (' + sessionResult.user.role + ')</div>';
+                    } else {
+                        resultsDiv.innerHTML += '<div class="error">❌ Session check failed: ' + sessionResult.error + '</div>';
+                    }
+                } else {
+                    resultsDiv.innerHTML += '<div class="error">❌ Admin login failed: ' + loginResult.message + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += '<div class="error">❌ Error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Test food API endpoints
+        async function testFoodAPI() {
+            const resultsDiv = document.getElementById('apiResults');
+            resultsDiv.innerHTML = '<div class="info">Testing food API...</div>';
+            
+            try {
+                // Test GET request
+                const getResponse = await fetch('api/food_items.php');
+                const getResult = await getResponse.json();
+                
+                if (getResult.success) {
+                    resultsDiv.innerHTML += '<div class="success">✅ GET request successful</div>';
+                    resultsDiv.innerHTML += '<div class="info">Found ' + getResult.items.length + ' food items</div>';
+                } else {
+                    resultsDiv.innerHTML += '<div class="error">❌ GET request failed: ' + getResult.error + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += '<div class="error">❌ API Error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Test adding a new food item
+        async function addTestFood() {
+            const resultsDiv = document.getElementById('addResults');
+            resultsDiv.innerHTML = '<div class="info">Adding test food item...</div>';
+            
+            const formData = {
+                name: document.getElementById('testName').value,
+                description: document.getElementById('testDescription').value,
+                price: parseFloat(document.getElementById('testPrice').value),
+                category: document.getElementById('testCategory').value,
+                preparation_time: parseInt(document.getElementById('testPrepTime').value)
+            };
+            
+            try {
+                const response = await fetch('api/food_items.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultsDiv.innerHTML += '<div class="success">✅ Food item added successfully!</div>';
+                    resultsDiv.innerHTML += '<div class="info">Message: ' + result.message + '</div>';
+                    
+                    // Reload current items
+                    loadCurrentItems();
+                } else {
+                    resultsDiv.innerHTML += '<div class="error">❌ Failed to add food item</div>';
+                    resultsDiv.innerHTML += '<div class="error">Error: ' + result.error + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += '<div class="error">❌ Request Error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Load current food items
+        async function loadCurrentItems() {
+            const resultsDiv = document.getElementById('currentItems');
+            resultsDiv.innerHTML = '<div class="info">Loading current food items...</div>';
+            
+            try {
+                const response = await fetch('api/food_items.php');
+                const result = await response.json();
+                
+                if (result.success) {
+                    let html = '<div class="success">✅ Successfully loaded ' + result.items.length + ' items</div>';
+                    html += '<div class="table-responsive"><table class="table table-sm">';
+                    html += '<thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Category</th><th>Actions</th></tr></thead><tbody>';
+                    
+                    result.items.forEach(item => {
+                        html += `<tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>$${parseFloat(item.price).toFixed(2)}</td>
+                            <td>${item.category || '-'}</td>
+                            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteTestItem(${item.id})">Delete</button></td>
+                        </tr>`;
+                    });
+                    
+                    html += '</tbody></table></div>';
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<div class="error">❌ Failed to load items: ' + result.error + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">❌ Load Error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Delete a test item
+        async function deleteTestItem(itemId) {
+            if (!confirm('Delete this test item?')) return;
+            
+            try {
+                const response = await fetch('api/food_items.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: itemId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('✅ Item deleted successfully');
+                    loadCurrentItems();
+                } else {
+                    alert('❌ Delete failed: ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Delete error: ' + error.message);
+            }
+        }
+        
+        // Test the dashboard save function
+        async function testDashboardSave() {
+            const resultsDiv = document.getElementById('dashboardResults');
+            resultsDiv.innerHTML = '<div class="info">Testing dashboard save function...</div>';
+            
+            // Simulate the exact same call as admin dashboard
+            const formData = {
+                name: 'Dashboard Test Item',
+                description: 'Test item from dashboard function',
+                price: 19.99,
+                category: 'Dashboard Test',
+                preparation_time: 12
+            };
+            
+            try {
+                const response = await fetch('api/food_items.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultsDiv.innerHTML += '<div class="success">✅ Dashboard save function works!</div>';
+                    resultsDiv.innerHTML += '<div class="info">Response: ' + result.message + '</div>';
+                } else {
+                    resultsDiv.innerHTML += '<div class="error">❌ Dashboard save failed</div>';
+                    resultsDiv.innerHTML += '<div class="error">Error: ' + result.error + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += '<div class="error">❌ Dashboard test error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Auto-run tests on page load
+        window.addEventListener('load', function() {
+            testAdminAuth();
+        });
+    </script>
+</body>
+</html>

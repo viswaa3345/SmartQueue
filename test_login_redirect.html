@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Login & Redirect - Smart Queue</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: rgba(255,255,255,0.1); 
+            padding: 30px; 
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .result { 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-radius: 8px; 
+            background: rgba(255,255,255,0.1);
+        }
+        .success { 
+            background: rgba(40, 167, 69, 0.3); 
+            border: 2px solid rgba(40, 167, 69, 0.5); 
+        }
+        .error { 
+            background: rgba(220, 53, 69, 0.3); 
+            border: 2px solid rgba(220, 53, 69, 0.5); 
+        }
+        .btn { 
+            background: #ff6b35; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            margin: 10px 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: #ff5722; }
+        input { 
+            padding: 10px; 
+            margin: 5px; 
+            border: none; 
+            border-radius: 5px; 
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Login & Redirect</h1>
+        
+        <div>
+            <h2>Login Test</h2>
+            <input type="email" id="email" placeholder="Email" value="viswaapalanisamy@gmail.com">
+            <input type="password" id="password" placeholder="Password" value="viswaa123">
+            <select id="role">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+            </select>
+            <br>
+            <button class="btn" onclick="testLogin()">Test Login</button>
+        </div>
+        
+        <div id="results"></div>
+        
+        <div>
+            <h2>Dashboard Links</h2>
+            <a href="user_dashboard.html" class="btn">👤 User Dashboard</a>
+            <a href="admin_dashboard.html" class="btn">🔧 Admin Dashboard</a>
+            <a href="index.html" class="btn">🏠 Main Login</a>
+        </div>
+    </div>
+
+    <script>
+    async function testLogin() {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '<div class="result">🔄 Testing login...</div>';
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
+        
+        try {
+            // Test login
+            const response = await fetch('auth/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&role=${encodeURIComponent(role)}`
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                resultsDiv.innerHTML += '<div class="result success">✅ Login successful!</div>';
+                resultsDiv.innerHTML += '<div class="result success">User: ' + JSON.stringify(result.user) + '</div>';
+                
+                // Test redirection
+                resultsDiv.innerHTML += '<div class="result">🔄 Testing redirection...</div>';
+                
+                if (role === 'admin') {
+                    resultsDiv.innerHTML += '<div class="result success">➡️ Should redirect to admin_dashboard.html</div>';
+                    setTimeout(() => {
+                        window.location.href = 'admin_dashboard.html';
+                    }, 2000);
+                } else {
+                    resultsDiv.innerHTML += '<div class="result success">➡️ Should redirect to user_dashboard.html</div>';
+                    setTimeout(() => {
+                        window.location.href = 'user_dashboard.html';
+                    }, 2000);
+                }
+                
+            } else {
+                resultsDiv.innerHTML += '<div class="result error">❌ Login failed: ' + result.message + '</div>';
+            }
+            
+        } catch (error) {
+            resultsDiv.innerHTML += '<div class="result error">❌ Error: ' + error.message + '</div>';
+        }
+    }
+    </script>
+</body>
+</html>

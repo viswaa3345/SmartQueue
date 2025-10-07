@@ -1,7 +1,6 @@
 <?php
 require_once 'headers.php';
 require_once 'db.php';
-require_once 'auth_helper.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -9,7 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-requireAuth();
+// Check authentication using session variables from AuthService
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
+    echo json_encode(['success' => false, 'error' => 'Authentication required']);
+    exit;
+}
 
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -18,7 +21,8 @@ if (!$input || !isset($input['token_id'])) {
     exit;
 }
 
-$user = getCurrentUser();
+$user_id = $_SESSION['user_id'];
+$user_role = $_SESSION['user_role'] ?? $_SESSION['role'] ?? 'customer';
 $token_id = $input['token_id'];
 
 try {
@@ -33,7 +37,7 @@ try {
     }
     
     // Check permissions
-    if ($user['role'] !== 'admin' && $token['user_id'] != $user['id']) {
+    if ($user_role !== 'admin' && $token['user_id'] != $user_id) {
         echo json_encode(['success' => false, 'error' => 'Access denied']);
         exit;
     }

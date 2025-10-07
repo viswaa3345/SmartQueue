@@ -26,6 +26,9 @@ try {
     $pass = $_POST['password'] ?? '';
     $role = $_POST['role'] ?? '';
     
+    // Map frontend role to database role
+    $dbRole = ($role === 'customer') ? 'user' : $role;
+    
     // Basic validation
     if (empty($email) || empty($pass) || empty($role)) {
         echo json_encode(['success' => false, 'message' => 'All fields are required']);
@@ -45,13 +48,13 @@ try {
     try {
         // First try with status column
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = ? AND status = 'active'");
-        $stmt->execute([$email, $role]);
+        $stmt->execute([$email, $dbRole]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         if (strpos($e->getMessage(), "Unknown column 'status'") !== false) {
             // Try without status column
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = ?");
-            $stmt->execute([$email, $role]);
+            $stmt->execute([$email, $dbRole]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
             throw $e;
@@ -69,9 +72,16 @@ try {
         exit;
     }
     
-    // Update last login
-    $stmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
-    $stmt->execute([$user['id']]);
+    // Update last login - handle missing column gracefully
+    try {
+        $stmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+        $stmt->execute([$user['id']]);
+    } catch (PDOException $e) {
+        // Ignore if last_login column doesn't exist
+        if (strpos($e->getMessage(), "Unknown column 'last_login'") === false) {
+            throw $e;
+        }
+    }
     
     // Set session variables
     $_SESSION['user_id'] = $user['id'];

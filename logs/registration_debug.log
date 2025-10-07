@@ -56,3 +56,64 @@
 [2025-09-26 07:59:48] REGISTRATION: Validation passed
 [2025-09-26 07:59:48] REGISTRATION: Password hashed successfully
 [2025-09-26 07:59:48] REGISTRATION: Database error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'viswaapalanisamy@gmail.com' for key 'email'
+[2025-09-27 06:13:10] SIMPLE_REG: Registration request started
+[2025-09-27 06:13:10] SIMPLE_REG: Registration data - Name: 'Test User', Email: 'testuser@example.com', Role: 'customer', Password length: 7
+[2025-09-27 06:13:10] SIMPLE_REG: Cleaned email: 'testuser@example.com'
+[2025-09-27 06:13:10] SIMPLE_REG: Validation passed, connecting to database
+[2025-09-27 06:13:10] SIMPLE_REG: Database connection successful
+[2025-09-27 06:13:10] SIMPLE_REG: Password hashed successfully
+[2025-09-27 06:13:10] SIMPLE_REG: Attempting insert with status column
+[2025-09-27 06:13:10] SIMPLE_REG: Insert failed with error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testuser@example.com' for key 'email'
+[2025-09-27 06:13:10] SIMPLE_REG: Database error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testuser@example.com' for key 'email'
+[2025-09-27 06:13:50] SIMPLE_REG: Registration request started
+[2025-09-27 06:13:50] SIMPLE_REG: Invalid method: GET
+[2025-09-27 06:13:50] REGISTRATION: Registration attempt started
+[2025-09-27 06:13:50] REGISTRATION: Invalid request method: GET
+[2025-09-27 06:13:53] SIMPLE_REG: Registration request started
+[2025-09-27 06:13:53] SIMPLE_REG: Registration data - Name: 'Test Admin', Email: 'testadmin@test.com', Role: 'admin', Password length: 7
+[2025-09-27 06:13:53] SIMPLE_REG: Cleaned email: 'testadmin@test.com'
+[2025-09-27 06:13:53] SIMPLE_REG: Invalid admin key: 'WRONG_KEY'
+[2025-09-27 06:13:56] SIMPLE_REG: Registration request started
+[2025-09-27 06:13:56] SIMPLE_REG: Invalid method: GET
+[2025-09-27 06:14:01] SIMPLE_REG: Registration request started
+[2025-09-27 06:14:01] SIMPLE_REG: Registration data - Name: 'Test User', Email: 'testuser@example.com', Role: 'customer', Password length: 7
+[2025-09-27 06:14:01] SIMPLE_REG: Cleaned email: 'testuser@example.com'
+[2025-09-27 06:14:01] SIMPLE_REG: Validation passed, connecting to database
+[2025-09-27 06:14:01] SIMPLE_REG: Database connection successful
+[2025-09-27 06:14:01] SIMPLE_REG: Password hashed successfully
+[2025-09-27 06:14:01] SIMPLE_REG: Attempting insert with status column
+[2025-09-27 06:14:01] SIMPLE_REG: Insert failed with error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testuser@example.com' for key 'email'
+[2025-09-27 06:14:01] SIMPLE_REG: Database error: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testuser@example.com' for key 'email'
+[2025-09-27 06:14:01] SIMPLE_REG: Registration request started
+[2025-09-27 06:14:01] SIMPLE_REG: Invalid method: GET
+[2025-09-27 06:14:01] REGISTRATION: Registration attempt started
+[2025-09-27 06:14:01] REGISTRATION: Invalid request method: GET
+[2025-09-27 06:14:01] SIMPLE_REG: Registration request started
+[2025-09-27 06:14:01] SIMPLE_REG: Registration data - Name: 'Test Admin', Email: 'testadmin@test.com', Role: 'admin', Password length: 7
+[2025-09-27 06:14:01] SIMPLE_REG: Cleaned email: 'testadmin@test.com'
+[2025-09-27 06:14:01] SIMPLE_REG: Invalid admin key: 'WRONG_KEY'
+[2025-09-27 06:14:01] SIMPLE_REG: Registration request started
+[2025-09-27 06:14:01] SIMPLE_REG: Invalid method: GET
+[2025-10-02 10:43:15] SIMPLE_REG: Registration request started
+[2025-10-02 10:43:15] SIMPLE_REG: Invalid method: GET
+[2025-10-02 10:43:15] REGISTRATION: Registration attempt started
+[2025-10-02 10:43:15] REGISTRATION: Invalid request method: GET
+[2025-10-02 11:37:13] SIMPLE_REG: Registration request started
+[2025-10-02 11:37:13] SIMPLE_REG: Registration data - Name: 'Test User', Email: 'testuser@example.com', Role: 'admin', Password length: 7
+[2025-10-02 11:37:13] SIMPLE_REG: Cleaned email: 'testuser@example.com'
+[2025-10-02 11:37:13] SIMPLE_REG: Validation passed, connecting to database
+[2025-10-02 11:37:13] SIMPLE_REG: Database connection successful
+[2025-10-02 11:37:13] SIMPLE_REG: Password hashed successfully
+[2025-10-02 11:37:13] SIMPLE_REG: Attempting insert with status column
+[2025-10-02 11:37:13] SIMPLE_REG: Insert with status column successful
+[2025-10-02 11:37:13] SIMPLE_REG: Registration successful - User ID: 26
+[2025-10-02 11:37:19] SIMPLE_REG: Registration request started
+[2025-10-02 11:37:19] SIMPLE_REG: Invalid method: GET
+[2025-10-02 11:37:21] SIMPLE_REG: Registration request started
+[2025-10-02 11:37:21] SIMPLE_REG: Registration data - Name: 'Test Admin', Email: 'testadmin@test.com', Role: 'admin', Password length: 7
+[2025-10-02 11:37:21] SIMPLE_REG: Cleaned email: 'testadmin@test.com'
+[2025-10-02 11:37:21] SIMPLE_REG: Invalid admin key: 'WRONG_KEY'
+[2025-10-02 11:37:23] SIMPLE_REG: Registration request started
+[2025-10-02 11:37:23] SIMPLE_REG: Invalid method: GET
+[2025-10-02 11:37:23] REGISTRATION: Registration attempt started
+[2025-10-02 11:37:23] REGISTRATION: Invalid request method: GET

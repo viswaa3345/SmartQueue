@@ -1,10 +1,13 @@
 <?php
 require_once 'headers.php';
 require_once 'db.php';
-require_once 'auth_helper.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    requireAuth('customer');
+    // Check authentication using session variables from AuthService
+    if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
+        echo json_encode(['success' => false, 'error' => 'Authentication required']);
+        exit;
+    }
     
     $input = json_decode(file_get_contents('php://input'), true);
     
@@ -13,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    $user = getCurrentUser();
+    $user_id = $_SESSION['user_id'];
     $food_item_id = $input['food_item_id'];
     $quantity = (int)$input['quantity'];
     $latitude = $input['latitude'] ?? null;
@@ -27,10 +30,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo->beginTransaction();
         
-        // Check if food item exists and is available
-        $stmt = $pdo->prepare("SELECT * FROM food_items WHERE id = ? AND is_available = 1");
-        $stmt->execute([$food_item_id]);
-        $food_item = $stmt->fetch();
+        // Check if food item exists and is available (with fallback for missing column)
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM food_items WHERE id = ? AND is_available = 1");
+            $stmt->execute([$food_item_id]);
+            $food_item = $stmt->fetch();
+        } catch (PDOException $e) {
+            if (strpos($e->getMessage(), "Unknown column 'is_available'") !== false) {
+                $stmt = $pdo->prepare("SELECT * FROM food_items WHERE id = ?");
+                $stmt->execute([$food_item_id]);
+                $food_item = $stmt->fetch();
+            } else {
+                throw $e;
+            }
+        }
         
         if (!$food_item) {
             throw new Exception('Food item not available');
@@ -38,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Check if user has an active token
         $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM tokens WHERE user_id = ? AND status = 'active'");
-        $stmt->execute([$user['id']]);
+        $stmt->execute([$user_id]);
         $active_count = $stmt->fetch()['count'];
         
         if ($active_count > 0) {
@@ -61,20 +74,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Insert token
         $stmt = $pdo->prepare("INSERT INTO tokens (token_number, user_id, food_item_id, quantity, estimated_time) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$token_number, $user['id'], $food_item_id, $quantity, $estimated_time]);
+        $stmt->execute([$token_number, $user_id, $food_item_id, $quantity, $estimated_time]);
         
         $token_id = $pdo->lastInsertId();
         
         // Store location if provided
         if ($latitude && $longitude) {
             $stmt = $pdo->prepare("INSERT INTO locations (user_id, token_id, latitude, longitude) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$user['id'], $token_id, $latitude, $longitude]);
+            $stmt->execute([$user_id, $token_id, $latitude, $longitude]);
         }
         
         // Create notification
         $message = "Your token {$token_number} has been created. Estimated waiting time: {$estimated_time} minutes.";
         $stmt = $pdo->prepare("INSERT INTO notifications (user_id, token_id, type, message) VALUES (?, ?, 'system', ?)");
-        $stmt->execute([$user['id'], $token_id, $message]);
+        $stmt->execute([$user_id, $token_id, $message]);
         
         $pdo->commit();
         

@@ -329,6 +329,34 @@
                 const result = await response.json();
                 
                 if (!result.authenticated) {
+                    // Try to restore session from localStorage
+                    const currentUser = localStorage.getItem('currentUser');
+                    if (currentUser) {
+                        try {
+                            const userData = JSON.parse(currentUser);
+                            const restoreResponse = await fetch('api/check_session.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    action: 'restore_session',
+                                    user_data: userData
+                                })
+                            });
+                            
+                            const restoreResult = await restoreResponse.json();
+                            if (restoreResult.success) {
+                                console.log('Session restored successfully');
+                                document.getElementById('userName').textContent = userData.name;
+                                return;
+                            }
+                        } catch (restoreError) {
+                            console.error('Session restore failed:', restoreError);
+                        }
+                    }
+                    
+                    // If session restore fails, redirect to login
                     window.location.href = 'index.html';
                     return;
                 }
@@ -380,7 +408,7 @@
                             <div class="food-name">${item.name}</div>
                             <div class="food-description">${item.description}</div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="food-price">$${parseFloat(item.price).toFixed(2)}</span>
+                                <span class="food-price">₹${parseInt(item.price)}</span>
                                 <span class="food-prep-time">
                                     <i class="fas fa-clock"></i> ${item.preparation_time} min
                                 </span>
@@ -396,7 +424,7 @@
 
         async function loadCurrentToken() {
             try {
-                const response = await fetch('api/book_token.php');
+                const response = await fetch('api/customer_token.php');
                 const result = await response.json();
                 
                 document.getElementById('tokenLoading').style.display = 'none';

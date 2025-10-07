@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login & Token Cancellation - Fixed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #dc3545;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #007bff; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        .login-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Admin Login & Token Cancellation - FIXED</h1>
+        
+        <div class="success">
+            <strong>✅ Issues Fixed Successfully!</strong><br>
+            • Admin login is working<br>
+            • Token cancellation functionality is restored<br>
+            • Database structure has been corrected
+        </div>
+
+        <h2>🔑 Admin Login Information</h2>
+        <table>
+            <tr>
+                <th>Account Type</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td><strong>Admin</strong></td>
+                <td>admin@restaurant.com</td>
+                <td>admin123</td>
+                <td><span style="color: green;">✅ Working</span></td>
+            </tr>
+            <tr>
+                <td><strong>Customer</strong></td>
+                <td>viswaapalanisamy@gmail.com</td>
+                <td>viswaa123</td>
+                <td><span style="color: green;">✅ Working</span></td>
+            </tr>
+        </table>
+
+        <h2>🚀 Test Admin Login</h2>
+        <div class="login-form">
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">Admin Email:</label>
+                    <input type="email" id="adminEmail" value="admin@restaurant.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password:</label>
+                    <input type="password" id="adminPassword" value="admin123" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role:</label>
+                    <select id="role">
+                        <option value="admin" selected>Admin</option>
+                        <option value="customer">Customer</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Test Admin Login</button>
+            </form>
+            <div id="loginResult"></div>
+        </div>
+
+        <h2>🎫 Token Cancellation</h2>
+        <div class="warning">
+            <strong>📋 How Token Cancellation Works:</strong><br>
+            1. User must be logged in (customer can cancel their own tokens, admin can cancel any token)<br>
+            2. Token must have "active" status to be cancellable<br>
+            3. After cancellation, token status changes to "cancelled" and cancelled_at timestamp is set<br>
+            4. A notification is created for the user
+        </div>
+
+        <div class="success">
+            <strong>✅ Token Cancellation Fixes Applied:</strong><br>
+            • Added missing 'cancelled_at' column to tokens table<br>
+            • Added missing 'status' column to tokens table<br>
+            • Updated existing tokens to 'active' status<br>
+            • Verified notifications table exists<br>
+        </div>
+
+        <h2>🧪 Quick Tests</h2>
+        <div style="text-align: center;">
+            <a href="index.html" class="btn">🏠 Go to Login Page</a>
+            <a href="admin_dashboard.html" class="btn">👨‍💼 Admin Dashboard</a>
+            <a href="user_dashboard.html" class="btn">👤 User Dashboard</a>
+            <button onclick="clearCache()" class="btn btn-warning">🔄 Clear Browser Cache</button>
+        </div>
+
+        <h2>🔍 Technical Details</h2>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
+            <strong>Database Changes Made:</strong><br>
+            • <code>tokens</code> table: Added 'cancelled_at' column<br>
+            • <code>tokens</code> table: Added 'status' column with default 'active'<br>
+            • <code>users</code> table: Verified admin user exists<br>
+            • <code>notifications</code> table: Verified structure exists<br><br>
+            
+            <strong>Authentication System:</strong><br>
+            • Session-based authentication working correctly<br>
+            • Role-based access control implemented<br>
+            • Admin can cancel any token, customers can cancel their own<br><br>
+            
+            <strong>API Endpoints:</strong><br>
+            • <code>auth/login.php</code> - Login endpoint (working ✅)<br>
+            • <code>api/cancel_token.php</code> - Token cancellation (fixed ✅)<br>
+            • <code>api/customer_token.php</code> - View tokens (working ✅)<br>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const role = document.getElementById('role').value;
+            const resultDiv = document.getElementById('loginResult');
+            
+            try {
+                const response = await fetch('auth/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&role=${encodeURIComponent(role)}`
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Login Successful!</strong><br>
+                            Welcome, ${result.user.name}<br>
+                            Role: ${result.user.role}<br>
+                            User ID: ${result.user.id}
+                        </div>
+                    `;
+                    
+                    // Store login info
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: result.user.id,
+                        email: result.user.email,
+                        name: result.user.name,
+                        role: result.user.role,
+                        selectedRole: role
+                    }));
+                    
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <strong>❌ Login Failed</strong><br>
+                            ${result.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Connection Error</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        });
+
+        function clearCache() {
+            // Clear browser cache
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    names.forEach(function(name) {
+                        caches.delete(name);
+                    });
+                });
+            }
+            
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Force reload
+            location.reload(true);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+---
+
+### **1. Searching Algorithms**  
+   - Linear Search  
+   - Binary Search  
+   - Interpolation Search  
+   - Jump Search  
+   - Exponential Search  
+   - Fibonacci Search  
+
+### **3. Divide and Conquer Algorithms**  
+   - Merge Sort  
+   - Quick Sort  
+   - Binary Search  
+   - Closest Pair of Points Problem  
+   - Strassen’s Matrix Multiplication  
+
+---
+
+### **4. Graph Algorithms**  
+   - Breadth-First Search (BFS)  
+   - Depth-First Search (DFS)  
+   - Dijkstra’s Algorithm (Shortest Path)  
+   - Bellman-Ford Algorithm  
+   - Floyd-Warshall Algorithm  
+   - Prim’s Algorithm (Minimum Spanning Tree)  
+   - Kruskal’s Algorithm (Minimum Spanning Tree)  
+   - Topological Sorting  
+   - Kosaraju’s Algorithm (Strongly Connected Components)  
+   - Tarjan’s Algorithm (SCC)  
+   - Johnson’s Algorithm (All-Pairs Shortest Path)  
+   - A* Search Algorithm  
+   - Floyd-Warshall Algorithm  
+   - Edmonds-Karp Algorithm (Max Flow)  
+   - Hopcroft-Karp Algorithm (Bipartite Matching)  
+
+---
+
+### **5. Greedy Algorithms**  
+   - Activity Selection Problem  
+   - Huffman Encoding  
+   - Kruskal’s Algorithm  
+   - Prim’s Algorithm  
+   - Dijkstra’s Algorithm  
+
+---
+
+### **6. Dynamic Programming (DP) Algorithms**  
+   - 0/1 Knapsack Problem  
+   - Longest Common Subsequence (LCS)  
+   - Longest Increasing Subsequence (LIS)  
+   - Matrix Chain Multiplication  
+   - Floyd-Warshall Algorithm  
+   - Bellman-Ford Algorithm  
+   - Coin Change Problem  
+   - Rod Cutting Problem  
+   - Edit Distance  
+   - Traveling Salesman Problem (TSP)  
+   - Subset Sum Problem  
+   - Egg Dropping Puzzle  
+
+---
+
+### **7. Backtracking Algorithms**  
+   - N-Queens Problem  
+   - Sudoku Solver  
+   - Rat in a Maze  
+   - Hamiltonian Cycle  
+   - Subset Sum Problem  
+
+---
+
+### **8. Bit Manipulation Algorithms**  
+   - XOR-based Operations  
+   - Count Set Bits  
+   - Find the only non-repeating number  
+   - Check if a number is a power of two  
+
+---
+
+### **9. String Algorithms**  
+   - Naïve Pattern Searching  
+   - Knuth-Morris-Pratt (KMP) Algorithm  
+   - Rabin-Karp Algorithm  
+   - Z Algorithm  
+   - Aho-Corasick Algorithm  
+   - Boyer-Moore Algorithm  
+   - Suffix Array Construction  
+   - Suffix Tree Construction  
+   - Trie Data Structure  
+
+---
+
+### **10. Computational Geometry Algorithms**  
+   - Convex Hull (Graham’s Scan, Jarvis’s March)  
+   - Line Intersection Checking  
+   - Closest Pair of Points  
+   - Voronoi Diagram  
+   - Delaunay Triangulation  
+
+---
+
+### **11. Number Theory Algorithms**  
+   - Euclidean Algorithm (GCD)  
+   - Extended Euclidean Algorithm  
+   - Sieve of Eratosthenes (Prime Numbers)  
+   - Modular Exponentiation  
+   - Fermat’s Theorem  
+   - Chinese Remainder Theorem  
+   - Miller-Rabin Primality Test  
+
+---
+
+### **12. Randomized Algorithms**  
+   - Monte Carlo Algorithm  
+   - Las Vegas Algorithm  
+   - Randomized Quick Sort  
+   - Randomized Min Cut Algorithm  
+
+---
+
+### **13. Tree Algorithms**  
+   - Binary Tree Traversals (Inorder, Preorder, Postorder)  
+   - Lowest Common Ancestor (LCA)  
+   - Segment Tree  
+   - Fenwick Tree (Binary Indexed Tree)  
+   - AVL Tree  
+   - Red-Black Tree  
+   - Splay Tree  
+   - Trie  
+   - Treap  
+
+---
+
+### **14. Advanced Graph Algorithms**  
+   - Eulerian Path & Circuit  
+   - Hamiltonian Cycle  
+   - Graph Coloring  
+   - Network Flow (Ford-Fulkerson Algorithm)  
+   - Tarjan’s Bridge-Finding Algorithm  
+
+---
+
+### **15. Machine Learning & AI Algorithms**  
+   - Gradient Descent  
+   - Backpropagation  
+   - Decision Tree Algorithms  
+   - K-Means Clustering  
+   - Random Forest Algorithm  
+   - Neural Networks  
+   - Support Vector Machines (SVM)  
+   - Genetic Algorithms  
+
+---
+
+### **16. Cryptographic Algorithms**  
+   - RSA Encryption  
+   - AES (Advanced Encryption Standard)  
+   - SHA (Secure Hash Algorithm)  
+   - Diffie-Hellman Key Exchange  
+   - Elliptic Curve Cryptography  
+
+---
+
+### **17. Parallel & Distributed Algorithms**  
+   - MapReduce  
+   - Parallel Sorting  
+   - Multi-threaded Search Algorithms  
+   - Distributed Consensus (Paxos, Raft)  
+
+---
+
+### **18. Approximation & Heuristic Algorithms**  
+   - Traveling Salesman Problem (TSP) Approximation  
+   - Greedy Set Cover Algorithm  
+   - Simulated Annealing  
+
+---
+
+### **19. Blockchain & Consensus Algorithms**  
+   - Proof of Work (PoW)  
+   - Proof of Stake (PoS)  
+   - Byzantine Fault Tolerance (BFT)  
+
+---
+
+### **20. Bioinformatics Algorithms**  
+   - Needleman-Wunsch Algorithm  
+   - Smith-Waterman Algorithm  
+   - BLAST Algorithm  
+
+---
+
+This list covers nearly all major algorithms still used in the industry. Do you need explanations or implementations for any specific one? 🚀

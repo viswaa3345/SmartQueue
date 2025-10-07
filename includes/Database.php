@@ -46,7 +46,7 @@ class Database {
             return $stmt;
         } catch(PDOException $e) {
             error_log("Database Query Error: " . $e->getMessage());
-            throw new Exception("Database operation failed");
+            throw new Exception("Database operation failed: " . $e->getMessage());
         }
     }
     
@@ -71,13 +71,23 @@ class Database {
     
     public function update($table, $data, $where, $whereParams = []) {
         $set = [];
-        foreach (array_keys($data) as $key) {
-            $set[] = "{$key} = :{$key}";
-        }
-        $setClause = implode(', ', $set);
+        $params = [];
+        $paramIndex = 0;
         
+        // Use positional parameters for consistency
+        foreach ($data as $key => $value) {
+            $set[] = "{$key} = ?";
+            $params[] = $value;
+            $paramIndex++;
+        }
+        
+        $setClause = implode(', ', $set);
         $sql = "UPDATE {$table} SET {$setClause} WHERE {$where}";
-        $params = array_merge($data, $whereParams);
+        
+        // Add where parameters
+        foreach ($whereParams as $param) {
+            $params[] = $param;
+        }
         
         return $this->query($sql, $params);
     }

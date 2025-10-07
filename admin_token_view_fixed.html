@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Token Viewing Fixed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #dc3545;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #000;
+        }
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #007bff; }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👨‍💼 Admin Dashboard - Token Viewing FIXED</h1>
+        
+        <div class="success">
+            <strong>✅ Admin Token Viewing Fixed!</strong><br>
+            The admin dashboard now has a proper API to view all customer tokens with complete details and statistics.
+        </div>
+
+        <h2>🔧 What Was Fixed</h2>
+        <table>
+            <tr>
+                <th>Issue</th>
+                <th>Root Cause</th>
+                <th>Solution</th>
+            </tr>
+            <tr>
+                <td>Admin can't see customer tokens</td>
+                <td>Dashboard was calling wrong API (<code>api/book_token.php</code>)</td>
+                <td>Created new <code>api/admin_tokens.php</code> for viewing all tokens</td>
+            </tr>
+            <tr>
+                <td>Statistics not updating</td>
+                <td>No function to update dashboard stats</td>
+                <td>Added <code>updateStats()</code> function with correct element IDs</td>
+            </tr>
+            <tr>
+                <td>Session lost on page navigation</td>
+                <td>Same session issue as customer dashboard</td>
+                <td>Added session restoration for admin dashboard</td>
+            </tr>
+            <tr>
+                <td>Missing token details</td>
+                <td>Limited token information display</td>
+                <td>Enhanced API to include user name, email, food details</td>
+            </tr>
+        </table>
+
+        <h2>🎯 Admin Dashboard Features</h2>
+        <div class="warning">
+            <strong>📊 What Admins Can Now See:</strong><br>
+            • All customer tokens (active, called, completed, cancelled)<br>
+            • Customer details (name, email) for each token<br>
+            • Food item details and quantities<br>
+            • Real-time statistics (active, called, completed today, total customers)<br>
+            • Token management actions (call, complete, cancel)<br>
+            • Tokens sorted by status priority (active first)
+        </div>
+
+        <h2>🧪 Test the Admin Dashboard</h2>
+        <div id="testResults">
+            <button onclick="testAdminLogin()" class="btn btn-success">Test Admin Login & Session</button>
+            <button onclick="testTokensAPI()" class="btn">Test Admin Tokens API</button>
+            <button onclick="simulateBooking()" class="btn btn-warning">Simulate Customer Booking</button>
+        </div>
+
+        <div id="results"></div>
+
+        <h2>📋 Admin Login Credentials</h2>
+        <div class="container" style="background: #f8f9fa;">
+            <table>
+                <tr>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Role</th>
+                </tr>
+                <tr>
+                    <td>admin@restaurant.com</td>
+                    <td>admin123</td>
+                    <td>Admin</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>🚀 How to Test</h2>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
+            <strong>Step-by-Step Testing:</strong><br>
+            1. <strong>Book a token as customer</strong> - Login as customer and book a token<br>
+            2. <strong>Login as admin</strong> - Use admin credentials above<br>
+            3. <strong>View tokens</strong> - Admin dashboard should now show the customer's token<br>
+            4. <strong>Manage tokens</strong> - Use Call, Complete, or Cancel buttons<br>
+            5. <strong>Check statistics</strong> - Numbers should update automatically
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" class="btn">🏠 Login Page</a>
+            <a href="admin_dashboard.html" class="btn btn-success">👨‍💼 Test Admin Dashboard</a>
+            <a href="user_dashboard.html" class="btn">👤 Customer Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        async function testAdminLogin() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="test-result">Testing admin login and session...</div>';
+            
+            try {
+                // Test admin login
+                const response = await fetch('auth/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'email=admin@restaurant.com&password=admin123&role=admin'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultsDiv.innerHTML += '<div class="test-result success">✅ Admin login successful! User: ' + result.user.name + '</div>';
+                    
+                    // Store in localStorage like the real login does
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: result.user.id,
+                        email: result.user.email,
+                        name: result.user.name,
+                        role: result.user.role,
+                        selectedRole: 'admin'
+                    }));
+                    
+                    resultsDiv.innerHTML += '<div class="test-result success">✅ Admin session stored. Ready to view tokens!</div>';
+                } else {
+                    resultsDiv.innerHTML += '<div class="test-result error">❌ Admin login failed: ' + result.message + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += '<div class="test-result error">❌ Login error: ' + error.message + '</div>';
+            }
+        }
+
+        async function testTokensAPI() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<div class="test-result">Testing admin tokens API...</div>';
+            
+            try {
+                // First restore admin session
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const userData = JSON.parse(currentUser);
+                    await fetch('api/check_session.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'restore_session',
+                            user_data: userData
+                        })
+                    });
+                }
+                
+                // Test admin tokens API
+                const response = await fetch('api/admin_tokens.php');
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultsDiv.innerHTML += '<div class="test-result success">✅ Admin tokens API working! Found ' + result.tokens.length + ' tokens</div>';
+                    resultsDiv.innerHTML += '<div class="test-result success">📊 Stats: Active: ' + result.stats.active + ', Called: ' + result.stats.called + ', Completed Today: ' + result.stats.completed_today + ', Total Customers: ' + result.stats.total_customers + '</div>';
+                    
+                    if (result.tokens.length > 0) {
+                        const token = result.tokens[0];
+                        resultsDiv.innerHTML += '<div class="test-result success">🎫 Sample Token: ' + token.token_number + ' - ' + (token.user_name || 'Unknown') + ' - ' + (token.food_name || 'Unknown Item') + ' (' + token.status + ')</div>';
+                    }
+                } else {
+                    resultsDiv.innerHTML += '<div class="test-result error">❌ Admin tokens API error: ' + result.error + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += '<div class="test-result error">❌ API test error: ' + error.message + '</div>';
+            }
+        }
+
+        async function simulateBooking() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<div class="test-result">Simulating customer token booking...</div>';
+            
+            try {
+                // First restore customer session
+                const customerData = {
+                    id: 3,
+                    email: 'viswaapalanisamy@gmail.com',
+                    name: 'viswaa AP',
+                    role: 'customer'
+                };
+                
+                await fetch('api/check_session.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'restore_session',
+                        user_data: customerData
+                    })
+                });
+                
+                // Try to book a token
+                const bookingResponse = await fetch('api/book_token.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        food_item_id: 1,
+                        quantity: 1
+                    })
+                });
+                
+                const bookingResult = await bookingResponse.json();
+                
+                if (bookingResult.success) {
+                    resultsDiv.innerHTML += '<div class="test-result success">✅ Customer token booked successfully! Token: ' + bookingResult.token_number + '</div>';
+                    resultsDiv.innerHTML += '<div class="test-result success">🎯 Now admin should be able to see this token in the dashboard!</div>';
+                } else {
+                    resultsDiv.innerHTML += '<div class="test-result warning">⚠️ Booking result: ' + bookingResult.error + '</div>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += '<div class="test-result error">❌ Booking simulation error: ' + error.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -406,6 +406,36 @@
                 const result = await response.json();
                 
                 if (!result.authenticated) {
+                    // Try to restore session from localStorage
+                    const currentUser = localStorage.getItem('currentUser');
+                    if (currentUser) {
+                        try {
+                            const userData = JSON.parse(currentUser);
+                            if (userData.role === 'admin' || userData.selectedRole === 'admin') {
+                                const restoreResponse = await fetch('api/check_session.php', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        action: 'restore_session',
+                                        user_data: userData
+                                    })
+                                });
+                                
+                                const restoreResult = await restoreResponse.json();
+                                if (restoreResult.success) {
+                                    console.log('Admin session restored successfully');
+                                    document.getElementById('adminName').textContent = userData.name;
+                                    return;
+                                }
+                            }
+                        } catch (restoreError) {
+                            console.error('Session restore failed:', restoreError);
+                        }
+                    }
+                    
+                    // If session restore fails, redirect to login
                     window.location.href = 'index.html';
                     return;
                 }
@@ -430,7 +460,7 @@
 
         async function loadTokens() {
             try {
-                const response = await fetch('api/book_token.php');
+                const response = await fetch('api/admin_tokens.php');
                 const result = await response.json();
                 
                 document.getElementById('tokensLoading').style.display = 'none';
@@ -438,12 +468,14 @@
                 if (result.success) {
                     currentTokens = result.tokens;
                     displayTokens(currentTokens);
+                    updateStats(result.stats);
                 } else {
-                    showAlert('danger', 'Failed to load tokens');
+                    showAlert('danger', 'Failed to load tokens: ' + (result.error || 'Unknown error'));
                 }
             } catch (error) {
                 document.getElementById('tokensLoading').style.display = 'none';
-                showAlert('danger', 'Error loading tokens');
+                console.error('Token loading error:', error);
+                showAlert('danger', 'Error loading tokens: ' + error.message);
             }
         }
 
@@ -463,8 +495,9 @@
                             <div>
                                 <span class="token-number">${token.token_number}</span>
                                 <div class="mt-1">
-                                    <strong>${token.customer_name || 'Unknown Customer'}</strong><br>
-                                    ${token.food_name} (x${token.quantity})<br>
+                                    <strong>${token.user_name || 'Unknown Customer'}</strong><br>
+                                    <small class="text-muted">${token.user_email || ''}</small><br>
+                                    ${token.food_name || 'Unknown Item'} (x${token.quantity})<br>
                                     <small class="text-muted">Created: ${formatDateTime(token.created_at)}</small>
                                 </div>
                             </div>
@@ -480,6 +513,14 @@
             });
             
             tokensList.innerHTML = html;
+        }
+
+        function updateStats(stats) {
+            // Update the dashboard statistics cards
+            document.getElementById('activeTokens').textContent = stats.active || 0;
+            document.getElementById('calledTokens').textContent = stats.called || 0;
+            document.getElementById('completedTokens').textContent = stats.completed_today || 0;
+            document.getElementById('totalCustomers').textContent = stats.total_customers || 0;
         }
 
         function getStatusColor(status) {
@@ -654,17 +695,33 @@
         }
 
         async function saveFoodItem() {
+            // Validate form data
+            const name = document.getElementById('foodName').value.trim();
+            const price = document.getElementById('foodPrice').value;
+            
+            if (!name) {
+                showAlert('danger', 'Food name is required');
+                return;
+            }
+            
+            if (!price || isNaN(price) || parseFloat(price) <= 0) {
+                showAlert('danger', 'Valid price is required');
+                return;
+            }
+            
             const formData = {
                 id: document.getElementById('foodId').value,
-                name: document.getElementById('foodName').value,
-                description: document.getElementById('foodDescription').value,
-                price: parseFloat(document.getElementById('foodPrice').value),
-                category: document.getElementById('foodCategory').value,
-                preparation_time: parseInt(document.getElementById('foodPrepTime').value)
+                name: name,
+                description: document.getElementById('foodDescription').value.trim(),
+                price: parseFloat(price),
+                category: document.getElementById('foodCategory').value.trim(),
+                preparation_time: parseInt(document.getElementById('foodPrepTime').value) || 5
             };
             
             const isEdit = formData.id !== '';
             const method = isEdit ? 'PUT' : 'POST';
+            
+            console.log('Saving food item:', method, formData);
             
             try {
                 const response = await fetch('api/food_items.php', {
@@ -673,16 +730,27 @@
                     body: JSON.stringify(formData)
                 });
                 
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const result = await response.json();
+                console.log('API response:', result);
+                
                 if (result.success) {
                     bootstrap.Modal.getInstance(document.getElementById('foodModal')).hide();
                     showAlert('success', result.message);
                     loadMenu();
                 } else {
-                    showAlert('danger', result.error);
+                    console.error('API error:', result.error);
+                    showAlert('danger', result.error || 'Unknown error occurred');
                 }
             } catch (error) {
-                showAlert('danger', 'Error saving food item');
+                console.error('Save food item error:', error);
+                showAlert('danger', 'Error saving food item: ' + error.message);
             }
         }
 

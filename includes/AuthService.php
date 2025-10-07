@@ -8,6 +8,11 @@ class AuthService {
     
     public function __construct() {
         try {
+            // Start session if not already started
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            
             // Ensure config files are loaded
             if (!defined('ADMIN_KEY')) {
                 require_once __DIR__ . '/../config/config.php';
@@ -99,12 +104,23 @@ class AuthService {
             return ['success' => false, 'message' => 'Invalid role'];
         }
         
+        // Map frontend role to database role - try both 'customer' and 'user' for customer login
+        $dbRole = $role; // Use the role as-is first
+        
         try {
-            // Get user from database
+            // Get user from database - try both roles for customer login
             $user = $this->db->fetch(
                 "SELECT * FROM users WHERE email = ? AND role = ? AND status = 'active'", 
-                [$email, $role]
+                [$email, $dbRole]
             );
+            
+            // If not found and role is customer, try 'user' role as fallback
+            if (!$user && $role === 'customer') {
+                $user = $this->db->fetch(
+                    "SELECT * FROM users WHERE email = ? AND role = 'user' AND status = 'active'", 
+                    [$email]
+                );
+            }
             
             if (!$user) {
                 return ['success' => false, 'message' => 'Invalid credentials'];
@@ -115,13 +131,20 @@ class AuthService {
                 return ['success' => false, 'message' => 'Invalid credentials'];
             }
             
-            // Update last login
-            $this->db->update(
-                'users', 
-                ['last_login' => date('Y-m-d H:i:s')],
-                'id = ?',
-                [$user['id']]
-            );
+            // Update last login - handle missing column gracefully
+            try {
+                $this->db->update(
+                    'users', 
+                    ['last_login' => date('Y-m-d H:i:s')],
+                    'id = ?',
+                    [$user['id']]
+                );
+            } catch (Exception $e) {
+                // Ignore if last_login column doesn't exist
+                if (strpos($e->getMessage(), "Unknown column 'last_login'") === false) {
+                    throw $e;
+                }
+            }
             
             // Set session
             $this->setUserSession($user);
@@ -139,7 +162,8 @@ class AuthService {
             
         } catch (Exception $e) {
             error_log("Login Error: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Login failed. Please try again.'];
+            error_log("Login Error Stack: " . $e->getTraceAsString());
+            return ['success' => false, 'message' => 'Login failed: ' . $e->getMessage()];
         }
     }
     

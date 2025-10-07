@@ -1,111 +1,116 @@
 <?php
-// Comprehensive System Diagnosis
+// Comprehensive system diagnosis tool
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-echo "<!DOCTYPE html><html><head><title>System Diagnosis</title>";
+echo "<!DOCTYPE html><html><head><title>Smart Queue System Diagnosis</title>";
 echo "<style>
-body { font-family: Arial, sans-serif; margin: 20px; }
-.section { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 5px; }
-.success { background: #d4edda; color: #155724; }
-.error { background: #f8d7da; color: #721c24; }
-.warning { background: #fff3cd; color: #856404; }
-.info { background: #cce7ff; color: #004085; }
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-th { background-color: #f2f2f2; }
-h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .section { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 5px; }
+    .success { background: #d4edda; color: #155724; padding: 10px; border-radius: 3px; }
+    .error { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 3px; }
+    .warning { background: #fff3cd; color: #856404; padding: 10px; border-radius: 3px; }
+    .info { background: #cce7ff; color: #004085; padding: 10px; border-radius: 3px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f8f9fa; }
+    .fix-btn { background: #28a745; color: white; padding: 8px 16px; text-decoration: none; border-radius: 3px; }
 </style></head><body>";
 
-echo "<h1>🔍 Complete System Diagnosis</h1>";
+echo "<h1>🔍 Smart Queue System Complete Diagnosis</h1>";
+echo "<p><strong>Timestamp:</strong> " . date('Y-m-d H:i:s') . "</p>";
 
 $issues = [];
 $fixes = [];
 
 // 1. Database Connection Test
-echo "<div class='section'><h2>1. Database Connection</h2>";
+echo "<div class='section'>";
+echo "<h2>1. Database Connection & Structure</h2>";
+
 try {
     $host = '127.0.0.1';
     $username = 'root';
     $password = '';
     $dbname = 'queue_db';
     
+    // Test MySQL connection
+    $pdo = new PDO("mysql:host=$host", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "<div class='success'>✅ MySQL connection successful</div>";
+    
+    // Check if database exists
+    $stmt = $pdo->query("SHOW DATABASES LIKE 'queue_db'");
+    if ($stmt->rowCount() > 0) {
+        echo "<div class='success'>✅ Database 'queue_db' exists</div>";
+    } else {
+        echo "<div class='error'>❌ Database 'queue_db' does not exist</div>";
+        $issues[] = "Database 'queue_db' missing";
+        $fixes[] = "Create database 'queue_db'";
+    }
+    
+    // Connect to specific database
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "<p class='success'>✅ Database connection successful</p>";
-} catch (PDOException $e) {
-    echo "<p class='error'>❌ Database connection failed: " . $e->getMessage() . "</p>";
-    $issues[] = "Database connection failed";
-    $fixes[] = "Run complete_reset.php to create database";
-}
-echo "</div>";
-
-// 2. Table Structure Check
-echo "<div class='section'><h2>2. Database Tables</h2>";
-if (isset($pdo)) {
-    $requiredTables = ['users', 'food_items', 'tokens'];
-    foreach ($requiredTables as $table) {
+    
+    // Check tables
+    $expectedTables = ['users', 'food_items', 'tokens'];
+    echo "<h3>Database Tables:</h3>";
+    echo "<table><tr><th>Table</th><th>Status</th><th>Records</th></tr>";
+    
+    foreach ($expectedTables as $table) {
         try {
             $stmt = $pdo->query("SHOW TABLES LIKE '$table'");
             if ($stmt->rowCount() > 0) {
-                echo "<p class='success'>✅ Table '$table' exists</p>";
-                
-                // Check table structure
-                $columns = $pdo->query("SHOW COLUMNS FROM $table");
-                echo "<details><summary>View $table structure</summary>";
-                echo "<table><tr><th>Field</th><th>Type</th><th>Null</th><th>Default</th></tr>";
-                while ($col = $columns->fetch()) {
-                    echo "<tr><td>{$col['Field']}</td><td>{$col['Type']}</td><td>{$col['Null']}</td><td>{$col['Default']}</td></tr>";
-                }
-                echo "</table></details>";
+                $countStmt = $pdo->query("SELECT COUNT(*) as count FROM $table");
+                $count = $countStmt->fetch()['count'];
+                echo "<tr><td>$table</td><td><span class='success'>✅ Exists</span></td><td>$count</td></tr>";
             } else {
-                echo "<p class='error'>❌ Table '$table' missing</p>";
+                echo "<tr><td>$table</td><td><span class='error'>❌ Missing</span></td><td>N/A</td></tr>";
                 $issues[] = "Table '$table' missing";
+                $fixes[] = "Create table '$table'";
             }
         } catch (PDOException $e) {
-            echo "<p class='error'>❌ Error checking table '$table': " . $e->getMessage() . "</p>";
-            $issues[] = "Error checking table '$table'";
+            echo "<tr><td>$table</td><td><span class='error'>❌ Error</span></td><td>Error: " . $e->getMessage() . "</td></tr>";
         }
+    }
+    echo "</table>";
+    
+    // Check users table structure
+    if ($pdo->query("SHOW TABLES LIKE 'users'")->rowCount() > 0) {
+        echo "<h3>Users Table Structure:</h3>";
+        $columns = $pdo->query("SHOW COLUMNS FROM users");
+        echo "<table><tr><th>Field</th><th>Type</th><th>Status</th></tr>";
+        
+        $requiredColumns = ['id', 'name', 'email', 'password', 'role', 'phone', 'status', 'created_at'];
+        $existingColumns = [];
+        
+        while ($column = $columns->fetch()) {
+            $existingColumns[] = $column['Field'];
+            echo "<tr><td>" . $column['Field'] . "</td><td>" . $column['Type'] . "</td><td><span class='success'>✅</span></td></tr>";
+        }
+        
+        foreach ($requiredColumns as $reqCol) {
+            if (!in_array($reqCol, $existingColumns)) {
+                echo "<tr><td>$reqCol</td><td>Missing</td><td><span class='error'>❌ Missing</span></td></tr>";
+                $issues[] = "Column '$reqCol' missing from users table";
+                $fixes[] = "Add column '$reqCol' to users table";
+            }
+        }
+        echo "</table>";
     }
     
-    // Check for required columns in users table
-    try {
-        $userColumns = $pdo->query("SHOW COLUMNS FROM users");
-        $existingColumns = [];
-        while ($col = $userColumns->fetch()) {
-            $existingColumns[] = $col['Field'];
-        }
-        
-        $requiredColumns = ['id', 'name', 'email', 'password', 'role'];
-        $optionalColumns = ['phone', 'status', 'created_at', 'last_login'];
-        
-        foreach ($requiredColumns as $col) {
-            if (in_array($col, $existingColumns)) {
-                echo "<p class='success'>✅ Required column '$col' exists</p>";
-            } else {
-                echo "<p class='error'>❌ Required column '$col' missing</p>";
-                $issues[] = "Required column '$col' missing in users table";
-            }
-        }
-        
-        foreach ($optionalColumns as $col) {
-            if (in_array($col, $existingColumns)) {
-                echo "<p class='success'>✅ Optional column '$col' exists</p>";
-            } else {
-                echo "<p class='warning'>⚠️ Optional column '$col' missing</p>";
-                $issues[] = "Optional column '$col' missing in users table";
-                $fixes[] = "Add missing columns with add_phone_column.php";
-            }
-        }
-    } catch (PDOException $e) {
-        echo "<p class='error'>❌ Error checking users table structure</p>";
-    }
+} catch (PDOException $e) {
+    echo "<div class='error'>❌ Database connection failed: " . $e->getMessage() . "</div>";
+    $issues[] = "Database connection failed";
+    $fixes[] = "Check MySQL service and configuration";
 }
 echo "</div>";
 
-// 3. File Structure Check
-echo "<div class='section'><h2>3. Critical Files Check</h2>";
-$criticalFiles = [
+// 2. File Structure Check
+echo "<div class='section'>";
+echo "<h2>2. File Structure Analysis</h2>";
+
+$requiredFiles = [
     'index.html' => 'Main login page',
     'register.html' => 'Registration page',
     'user_dashboard.html' => 'Customer dashboard',
@@ -113,194 +118,201 @@ $criticalFiles = [
     'api/register.php' => 'Registration API',
     'api/login.php' => 'Login API',
     'api/db.php' => 'Database connection',
-    'config/database.php' => 'Database config',
+    'simple_register.php' => 'Simple registration endpoint',
     'simple_login.php' => 'Simple login endpoint',
-    'simple_register.php' => 'Simple registration endpoint'
+    'debug_login.php' => 'Debug login endpoint',
+    'enhanced_register.php' => 'Enhanced registration endpoint'
 ];
 
-foreach ($criticalFiles as $file => $desc) {
-    if (file_exists(__DIR__ . '/' . $file)) {
-        echo "<p class='success'>✅ $desc ($file) exists</p>";
+echo "<table><tr><th>File</th><th>Description</th><th>Status</th><th>Size</th></tr>";
+
+foreach ($requiredFiles as $file => $desc) {
+    $fullPath = __DIR__ . '/' . $file;
+    if (file_exists($fullPath)) {
+        $size = filesize($fullPath);
+        $status = $size > 0 ? "<span class='success'>✅ OK</span>" : "<span class='warning'>⚠️ Empty</span>";
+        echo "<tr><td>$file</td><td>$desc</td><td>$status</td><td>" . number_format($size) . " bytes</td></tr>";
+        
+        if ($size == 0) {
+            $issues[] = "File '$file' is empty";
+            $fixes[] = "Restore content for '$file'";
+        }
     } else {
-        echo "<p class='error'>❌ $desc ($file) missing</p>";
-        $issues[] = "Critical file missing: $file";
-        $fixes[] = "Create missing file: $file";
+        echo "<tr><td>$file</td><td>$desc</td><td><span class='error'>❌ Missing</span></td><td>N/A</td></tr>";
+        $issues[] = "File '$file' missing";
+        $fixes[] = "Create file '$file'";
     }
 }
+echo "</table>";
+echo "</div>";
+
+// 3. PHP Syntax Check
+echo "<div class='section'>";
+echo "<h2>3. PHP Files Syntax Check</h2>";
+
+$phpFiles = glob(__DIR__ . '/*.php');
+$phpFiles = array_merge($phpFiles, glob(__DIR__ . '/api/*.php'));
+
+echo "<table><tr><th>File</th><th>Syntax Status</th><th>Issues</th></tr>";
+
+foreach ($phpFiles as $phpFile) {
+    $fileName = basename($phpFile);
+    $output = [];
+    $return_var = 0;
+    
+    exec("php -l \"$phpFile\" 2>&1", $output, $return_var);
+    
+    if ($return_var === 0) {
+        echo "<tr><td>$fileName</td><td><span class='success'>✅ Valid</span></td><td>None</td></tr>";
+    } else {
+        $error = implode(', ', $output);
+        echo "<tr><td>$fileName</td><td><span class='error'>❌ Error</span></td><td>$error</td></tr>";
+        $issues[] = "PHP syntax error in '$fileName'";
+        $fixes[] = "Fix syntax in '$fileName'";
+    }
+}
+echo "</table>";
 echo "</div>";
 
 // 4. Configuration Check
-echo "<div class='section'><h2>4. Configuration Check</h2>";
-$configs = [
-    'config/database.php',
-    'config/config.php',
-    'api/db.php'
-];
+echo "<div class='section'>";
+echo "<h2>4. Configuration Analysis</h2>";
 
-foreach ($configs as $config) {
-    if (file_exists(__DIR__ . '/' . $config)) {
-        echo "<p class='success'>✅ Configuration file $config exists</p>";
-        // Check if it's readable
-        if (is_readable(__DIR__ . '/' . $config)) {
-            echo "<p class='success'>✅ Configuration file $config is readable</p>";
-        } else {
-            echo "<p class='error'>❌ Configuration file $config is not readable</p>";
-            $issues[] = "Configuration file $config not readable";
-        }
-    } else {
-        echo "<p class='error'>❌ Configuration file $config missing</p>";
-        $issues[] = "Configuration file $config missing";
-    }
-}
-echo "</div>";
+// Check config files
+$configFiles = ['config/config.php', 'config/database.php', 'api/db.php'];
+echo "<h3>Configuration Files:</h3>";
+echo "<table><tr><th>Config File</th><th>Status</th><th>Issues</th></tr>";
 
-// 5. User Data Check
-echo "<div class='section'><h2>5. User Data</h2>";
-if (isset($pdo)) {
-    try {
-        $stmt = $pdo->query("SELECT COUNT(*) as count FROM users");
-        $userCount = $stmt->fetch()['count'];
-        echo "<p class='info'>📊 Total users in database: $userCount</p>";
+foreach ($configFiles as $configFile) {
+    $fullPath = __DIR__ . '/' . $configFile;
+    if (file_exists($fullPath)) {
+        $content = file_get_contents($fullPath);
+        $hasDbConfig = (strpos($content, 'DB_HOST') !== false || strpos($content, '$host') !== false);
         
-        if ($userCount > 0) {
-            $stmt = $pdo->query("SELECT role, COUNT(*) as count FROM users GROUP BY role");
-            echo "<table><tr><th>Role</th><th>Count</th></tr>";
-            while ($row = $stmt->fetch()) {
-                echo "<tr><td>" . htmlspecialchars($row['role']) . "</td><td>{$row['count']}</td></tr>";
-            }
-            echo "</table>";
-            
-            // Check for default accounts
-            $defaultAccounts = [
-                'admin@restaurant.com' => 'admin',
-                'customer@example.com' => 'customer'
-            ];
-            
-            foreach ($defaultAccounts as $email => $role) {
-                $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM users WHERE email = ? AND role = ?");
-                $stmt->execute([$email, $role]);
-                if ($stmt->fetch()['count'] > 0) {
-                    echo "<p class='success'>✅ Default $role account exists ($email)</p>";
-                } else {
-                    echo "<p class='warning'>⚠️ Default $role account missing ($email)</p>";
-                    $issues[] = "Default $role account missing";
-                    $fixes[] = "Run quick_setup.php to create default accounts";
-                }
-            }
+        if ($hasDbConfig) {
+            echo "<tr><td>$configFile</td><td><span class='success'>✅ Valid</span></td><td>Database config found</td></tr>";
         } else {
-            echo "<p class='warning'>⚠️ No users in database</p>";
-            $issues[] = "No users in database";
-            $fixes[] = "Run quick_setup.php to create default users";
+            echo "<tr><td>$configFile</td><td><span class='warning'>⚠️ Incomplete</span></td><td>No database configuration</td></tr>";
+            $issues[] = "Configuration incomplete in '$configFile'";
         }
-    } catch (PDOException $e) {
-        echo "<p class='error'>❌ Error checking user data: " . $e->getMessage() . "</p>";
-    }
-}
-echo "</div>";
-
-// 6. Log Files Check
-echo "<div class='section'><h2>6. Log Files</h2>";
-$logDir = __DIR__ . '/logs';
-if (is_dir($logDir)) {
-    echo "<p class='success'>✅ Logs directory exists</p>";
-    $logFiles = glob($logDir . '/*.log');
-    if (count($logFiles) > 0) {
-        echo "<p class='info'>📄 Log files found:</p><ul>";
-        foreach ($logFiles as $logFile) {
-            $filename = basename($logFile);
-            $size = filesize($logFile);
-            echo "<li>$filename (" . round($size/1024, 2) . " KB)</li>";
-        }
-        echo "</ul>";
     } else {
-        echo "<p class='info'>📄 No log files found (this is normal for new installations)</p>";
+        echo "<tr><td>$configFile</td><td><span class='error'>❌ Missing</span></td><td>File not found</td></tr>";
+        $issues[] = "Configuration file '$configFile' missing";
     }
-} else {
-    echo "<p class='warning'>⚠️ Logs directory missing</p>";
-    $issues[] = "Logs directory missing";
 }
+echo "</table>";
 echo "</div>";
 
-// 7. API Endpoints Test
-echo "<div class='section'><h2>7. API Endpoints Test</h2>";
-$apiEndpoints = [
-    'api/register.php' => 'Registration API',
-    'api/login.php' => 'Login API',
-    'simple_login.php' => 'Simple Login',
-    'simple_register.php' => 'Simple Registration'
+// 5. Endpoint Testing
+echo "<div class='section'>";
+echo "<h2>5. API Endpoints Testing</h2>";
+
+$endpoints = [
+    'simple_register.php' => 'Simple Registration',
+    'simple_login.php' => 'Simple Login', 
+    'debug_login.php' => 'Debug Login',
+    'enhanced_register.php' => 'Enhanced Registration',
+    'api/register.php' => 'API Registration',
+    'api/login.php' => 'API Login'
 ];
 
-foreach ($apiEndpoints as $endpoint => $desc) {
-    if (file_exists(__DIR__ . '/' . $endpoint)) {
-        echo "<p class='success'>✅ $desc endpoint exists</p>";
+echo "<table><tr><th>Endpoint</th><th>Description</th><th>Response Status</th><th>Issues</th></tr>";
+
+foreach ($endpoints as $endpoint => $desc) {
+    $fullPath = __DIR__ . '/' . $endpoint;
+    if (file_exists($fullPath)) {
+        // Test by making a minimal request
+        $url = "http://localhost/queue_app/$endpoint";
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 5
+            ]
+        ]);
         
-        // Quick syntax check
-        $content = file_get_contents(__DIR__ . '/' . $endpoint);
-        if (strpos($content, '<?php') === 0) {
-            echo "<p class='success'>✅ $desc has valid PHP syntax</p>";
+        $response = @file_get_contents($url, false, $context);
+        if ($response !== false) {
+            echo "<tr><td>$endpoint</td><td>$desc</td><td><span class='success'>✅ Responding</span></td><td>None</td></tr>";
         } else {
-            echo "<p class='warning'>⚠️ $desc may have syntax issues</p>";
-            $issues[] = "$desc endpoint has potential syntax issues";
+            echo "<tr><td>$endpoint</td><td>$desc</td><td><span class='warning'>⚠️ No Response</span></td><td>Check web server</td></tr>";
+            $issues[] = "Endpoint '$endpoint' not responding";
         }
     } else {
-        echo "<p class='error'>❌ $desc endpoint missing</p>";
-        $issues[] = "$desc endpoint missing";
+        echo "<tr><td>$endpoint</td><td>$desc</td><td><span class='error'>❌ Missing</span></td><td>File not found</td></tr>";
     }
 }
+echo "</table>";
 echo "</div>";
 
-// 8. Dashboard Files Check
-echo "<div class='section'><h2>8. Dashboard Files</h2>";
-$dashboards = [
-    'user_dashboard.html' => 'Customer Dashboard',
-    'admin_dashboard.html' => 'Admin Dashboard'
+// 6. Security Analysis
+echo "<div class='section'>";
+echo "<h2>6. Security Analysis</h2>";
+
+$securityChecks = [
+    'Password hashing' => 'password_hash usage',
+    'SQL injection protection' => 'PDO prepared statements',
+    'Session management' => 'session_start usage',
+    'Input validation' => 'filter_var usage',
+    'Error handling' => 'try-catch blocks'
 ];
 
-foreach ($dashboards as $file => $desc) {
-    if (file_exists(__DIR__ . '/' . $file)) {
-        echo "<p class='success'>✅ $desc exists</p>";
-        $content = file_get_contents(__DIR__ . '/' . $file);
-        if (strpos($content, '<html') !== false) {
-            echo "<p class='success'>✅ $desc has valid HTML structure</p>";
-        } else {
-            echo "<p class='warning'>⚠️ $desc may have HTML issues</p>";
+echo "<table><tr><th>Security Aspect</th><th>Status</th><th>Files Checked</th></tr>";
+
+// Check for security implementations in PHP files
+foreach ($securityChecks as $check => $pattern) {
+    $foundFiles = [];
+    foreach ($phpFiles as $phpFile) {
+        $content = file_get_contents($phpFile);
+        if (strpos($content, $pattern) !== false) {
+            $foundFiles[] = basename($phpFile);
         }
+    }
+    
+    if (!empty($foundFiles)) {
+        echo "<tr><td>$check</td><td><span class='success'>✅ Implemented</span></td><td>" . implode(', ', $foundFiles) . "</td></tr>";
     } else {
-        echo "<p class='error'>❌ $desc missing</p>";
-        $issues[] = "$desc missing";
-        $fixes[] = "Create $desc";
+        echo "<tr><td>$check</td><td><span class='warning'>⚠️ Not Found</span></td><td>None</td></tr>";
+        $issues[] = "Security feature '$check' not implemented";
     }
 }
+echo "</table>";
 echo "</div>";
 
 // Summary
-echo "<div class='section'><h2>📋 Diagnosis Summary</h2>";
-if (count($issues) == 0) {
-    echo "<p class='success'>🎉 No critical issues found! Your system appears to be working correctly.</p>";
+echo "<div class='section'>";
+echo "<h2>📋 Diagnosis Summary</h2>";
+
+if (empty($issues)) {
+    echo "<div class='success'>";
+    echo "<h3>🎉 System Status: HEALTHY</h3>";
+    echo "<p>No critical issues found. Your Smart Queue system appears to be functioning correctly.</p>";
+    echo "</div>";
 } else {
-    echo "<p class='error'>❌ Found " . count($issues) . " issues that need attention:</p>";
+    echo "<div class='warning'>";
+    echo "<h3>⚠️ Issues Found: " . count($issues) . "</h3>";
     echo "<ol>";
     foreach ($issues as $issue) {
         echo "<li>$issue</li>";
     }
     echo "</ol>";
+    echo "</div>";
     
+    echo "<div class='info'>";
     echo "<h3>🔧 Recommended Fixes:</h3>";
     echo "<ol>";
-    $uniqueFixes = array_unique($fixes);
-    foreach ($uniqueFixes as $fix) {
+    foreach ($fixes as $fix) {
         echo "<li>$fix</li>";
     }
     echo "</ol>";
+    echo "</div>";
 }
-echo "</div>";
 
-// Quick Fix Buttons
-echo "<div class='section'><h2>🚀 Quick Fix Actions</h2>";
-echo "<p><a href='complete_reset.php' style='background: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px;'>Complete Database Reset</a></p>";
-echo "<p><a href='add_phone_column.php' style='background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px;'>Fix Missing Columns</a></p>";
-echo "<p><a href='quick_setup.php' style='background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px;'>Quick Setup</a></p>";
-echo "<p><a href='test_registration_flow.html' style='background: #6f42c1; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px;'>Test Registration Flow</a></p>";
+echo "<h3>Quick Actions:</h3>";
+echo "<a href='complete_diagnosis.php' class='fix-btn'>🔄 Re-run Diagnosis</a> ";
+echo "<a href='complete_reset.php' class='fix-btn'>🗄️ Complete Database Reset</a> ";
+echo "<a href='fix_database_structure.php' class='fix-btn'>🔧 Fix Database Structure</a> ";
+echo "<a href='test_registration_flow.html' class='fix-btn'>🧪 Test Registration Flow</a>";
+
 echo "</div>";
 
 echo "</body></html>";

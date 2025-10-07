@@ -1,40 +1,41 @@
 <?php
-session_start();
+// auth_helper.php is included after headers.php which already starts session
 
 function requireAuth($required_role = null) {
-    if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
+    // Check if user is authenticated using our current session system
+    if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'error' => 'Authentication required']);
-        exit;
+        throw new Exception('Authentication required');
     }
     
-    if ($required_role && $_SESSION['role'] !== $required_role) {
+    // Check role if specified
+    if ($required_role && $_SESSION['user_role'] !== $required_role) {
         http_response_code(403);
-        echo json_encode(['success' => false, 'error' => 'Access denied']);
-        exit;
+        throw new Exception('Access denied. Required role: ' . $required_role . ', Current role: ' . $_SESSION['user_role']);
     }
     
     return true;
 }
 
 function getCurrentUser() {
-    if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
+    if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
         return null;
     }
     
     return [
         'id' => $_SESSION['user_id'],
-        'username' => $_SESSION['username'],
-        'role' => $_SESSION['role'],
-        'name' => $_SESSION['name']
+        'username' => $_SESSION['user_name'] ?? $_SESSION['user_email'],
+        'email' => $_SESSION['user_email'],
+        'role' => $_SESSION['user_role'],
+        'name' => $_SESSION['user_name'] ?? $_SESSION['user_email']
     ];
 }
 
 function isAdmin() {
-    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 }
 
 function isCustomer() {
-    return isset($_SESSION['role']) && $_SESSION['role'] === 'customer';
+    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'customer';
 }
 ?>

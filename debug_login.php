@@ -49,7 +49,10 @@ try {
     $pass = $_POST['password'] ?? '';
     $role = $_POST['role'] ?? '';
     
-    logError("Login data - Email: $email, Role: $role, Password length: " . strlen($pass));
+    // Map frontend role to database role
+    $dbRole = ($role === 'customer') ? 'user' : $role;
+    
+    logError("Login data - Email: $email, Frontend Role: $role, DB Role: $dbRole, Password length: " . strlen($pass));
     
     // Basic validation
     if (empty($email) || empty($pass) || empty($role)) {
@@ -70,7 +73,7 @@ try {
     try {
         // First try with status column
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = ? AND status = 'active'");
-        $stmt->execute([$email, $role]);
+        $stmt->execute([$email, $dbRole]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         logError("Query with status column successful");
     } catch (PDOException $e) {
@@ -78,7 +81,7 @@ try {
             logError("Status column not found, querying without it");
             // Try without status column
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = ?");
-            $stmt->execute([$email, $role]);
+            $stmt->execute([$email, $dbRole]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             logError("Query without status column successful");
         } else {
@@ -95,8 +98,9 @@ try {
         $existingUser = $stmtCheck->fetch(PDO::FETCH_ASSOC);
         
         if ($existingUser) {
-            logError("User exists but with different role: " . $existingUser['role']);
-            echo json_encode(['success' => false, 'message' => "User exists but not as $role. Found role: " . $existingUser['role']]);
+            $displayRole = ($existingUser['role'] === 'user') ? 'customer' : $existingUser['role'];
+            logError("User exists but with different role: " . $existingUser['role'] . " (display as: $displayRole)");
+            echo json_encode(['success' => false, 'message' => "User exists but not as $role. Found role: " . $displayRole]);
         } else {
             logError("User does not exist at all");
             echo json_encode(['success' => false, 'message' => 'User not found. Please register first.']);
@@ -115,9 +119,18 @@ try {
     
     logError("Password verification successful");
     
-    // Update last login
-    $stmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
-    $stmt->execute([$user['id']]);
+    // Update last login - handle missing column gracefully
+    try {
+        $stmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+        $stmt->execute([$user['id']]);
+        logError("Last login updated successfully");
+    } catch (PDOException $e) {
+        // Ignore if last_login column doesn't exist
+        if (strpos($e->getMessage(), "Unknown column 'last_login'") === false) {
+            throw $e;
+        }
+        logError("Last login column not found, skipping update");
+    }
     
     logError("Last login updated");
     

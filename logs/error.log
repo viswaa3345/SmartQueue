@@ -1,0 +1,22 @@
+[02-Oct-2025 05:08:02 America/New_York] Database Query Error: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[02-Oct-2025 05:08:02 America/New_York] Login Error: Database operation failed
+[02-Oct-2025 05:08:43 America/New_York] Database Query Error: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[02-Oct-2025 05:08:43 America/New_York] Login Error: Database operation failed
+[02-Oct-2025 05:08:59 America/New_York] Database Query Error: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[02-Oct-2025 05:08:59 America/New_York] Login Error: Database operation failed
+[02-Oct-2025 05:08:59 America/New_York] Login Error Stack: #0 C:\xampp2\htdocs\queue_app\includes\Database.php(82): Database->query('UPDATE users SE...', Array)
+#1 C:\xampp2\htdocs\queue_app\includes\AuthService.php(123): Database->update('users', Array, 'id = ?', Array)
+#2 C:\xampp2\htdocs\queue_app\debug_auth_service.php(23): AuthService->login('viswaapalanisam...', 'viswaa123', 'customer')
+#3 {main}
+[02-Oct-2025 05:09:17 America/New_York] Database Query Error: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[02-Oct-2025 05:09:17 America/New_York] Login Error: Database operation failed: SQLSTATE[HY093]: Invalid parameter number: mixed named and positional parameters
+[02-Oct-2025 05:09:17 America/New_York] Login Error Stack: #0 C:\xampp2\htdocs\queue_app\includes\Database.php(82): Database->query('UPDATE users SE...', Array)
+#1 C:\xampp2\htdocs\queue_app\includes\AuthService.php(123): Database->update('users', Array, 'id = ?', Array)
+#2 C:\xampp2\htdocs\queue_app\debug_auth_service.php(23): AuthService->login('viswaapalanisam...', 'viswaa123', 'customer')
+#3 {main}
+[02-Oct-2025 05:09:35 America/New_York] Database Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[02-Oct-2025 05:09:45 America/New_York] Database Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[02-Oct-2025 05:16:16 America/New_York] Database Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[02-Oct-2025 05:18:03 America/New_York] Database Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[02-Oct-2025 05:20:30 America/New_York] Database Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[02-Oct-2025 06:06:40 America/New_York] Database Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'

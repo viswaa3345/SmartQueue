@@ -34,3 +34,455 @@
 [2025-09-26 07:56:54] Query with status column successful
 [2025-09-26 07:56:54] User not found - Email: testuser@example.com, Role: customer
 [2025-09-26 07:56:54] User exists but with different role: 
+[2025-09-27 06:13:45] Login attempt started
+[2025-09-27 06:13:45] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:13:45] Database connection successful
+[2025-09-27 06:13:45] Login data - Email: admin@restaurant.com, Role: admin, Password length: 8
+[2025-09-27 06:13:45] Validation passed, querying database
+[2025-09-27 06:13:45] Query with status column successful
+[2025-09-27 06:13:45] User found - ID: 2, Name: Restaurant Admin
+[2025-09-27 06:13:45] Password verification successful
+[2025-09-27 06:13:45] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[2025-09-27 06:13:45] Login attempt started
+[2025-09-27 06:13:45] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:13:45] Database connection successful
+[2025-09-27 06:13:45] Login data - Email: customer@example.com, Role: customer, Password length: 11
+[2025-09-27 06:13:45] Validation passed, querying database
+[2025-09-27 06:13:45] Query with status column successful
+[2025-09-27 06:13:45] User not found - Email: customer@example.com, Role: customer
+[2025-09-27 06:13:45] User exists but with different role: 
+[2025-09-27 06:13:50] Login attempt started
+[2025-09-27 06:13:50] Invalid request method: GET
+[2025-09-27 06:13:53] Login attempt started
+[2025-09-27 06:13:53] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:13:53] Database connection successful
+[2025-09-27 06:13:53] Login data - Email: '; DROP TABLE users; --, Role: customer, Password length: 4
+[2025-09-27 06:13:53] Email validation failed: '; DROP TABLE users; --
+[2025-09-27 06:13:56] Login attempt started
+[2025-09-27 06:13:56] Invalid request method: GET
+[2025-09-27 06:14:01] Login attempt started
+[2025-09-27 06:14:01] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:14:01] Database connection successful
+[2025-09-27 06:14:01] Login data - Email: admin@restaurant.com, Role: admin, Password length: 8
+[2025-09-27 06:14:01] Validation passed, querying database
+[2025-09-27 06:14:01] Query with status column successful
+[2025-09-27 06:14:01] User found - ID: 2, Name: Restaurant Admin
+[2025-09-27 06:14:01] Password verification successful
+[2025-09-27 06:14:01] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[2025-09-27 06:14:01] Login attempt started
+[2025-09-27 06:14:01] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:14:01] Database connection successful
+[2025-09-27 06:14:01] Login data - Email: customer@example.com, Role: customer, Password length: 11
+[2025-09-27 06:14:01] Validation passed, querying database
+[2025-09-27 06:14:01] Query with status column successful
+[2025-09-27 06:14:01] User not found - Email: customer@example.com, Role: customer
+[2025-09-27 06:14:01] User exists but with different role: 
+[2025-09-27 06:14:01] Login attempt started
+[2025-09-27 06:14:01] Invalid request method: GET
+[2025-09-27 06:14:01] Login attempt started
+[2025-09-27 06:14:01] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:14:01] Database connection successful
+[2025-09-27 06:14:01] Login data - Email: '; DROP TABLE users; --, Role: customer, Password length: 4
+[2025-09-27 06:14:01] Email validation failed: '; DROP TABLE users; --
+[2025-09-27 06:14:01] Login attempt started
+[2025-09-27 06:14:01] Invalid request method: GET
+[2025-09-27 06:28:16] Login attempt started
+[2025-09-27 06:28:16] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:28:16] Database connection successful
+[2025-09-27 06:28:16] Login data - Email: admin@restaurant.com, Role: customer, Password length: 8
+[2025-09-27 06:28:16] Validation passed, querying database
+[2025-09-27 06:28:16] Query with status column successful
+[2025-09-27 06:28:16] User not found - Email: admin@restaurant.com, Role: customer
+[2025-09-27 06:28:16] User exists but with different role: admin
+[2025-09-27 06:28:24] Login attempt started
+[2025-09-27 06:28:24] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:28:24] Database connection successful
+[2025-09-27 06:28:24] Login data - Email: admin@restaurant.com, Role: admin, Password length: 8
+[2025-09-27 06:28:24] Validation passed, querying database
+[2025-09-27 06:28:24] Query with status column successful
+[2025-09-27 06:28:24] User found - ID: 2, Name: Restaurant Admin
+[2025-09-27 06:28:24] Password verification successful
+[2025-09-27 06:28:24] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[2025-09-27 06:28:29] Login attempt started
+[2025-09-27 06:28:29] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:28:29] Database connection successful
+[2025-09-27 06:28:29] Login data - Email: admin@restaurant.com, Role: admin, Password length: 8
+[2025-09-27 06:28:29] Validation passed, querying database
+[2025-09-27 06:28:29] Query with status column successful
+[2025-09-27 06:28:29] User found - ID: 2, Name: Restaurant Admin
+[2025-09-27 06:28:29] Password verification successful
+[2025-09-27 06:28:29] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[2025-09-27 06:28:30] Login attempt started
+[2025-09-27 06:28:30] Attempting database connection to 127.0.0.1/queue_db
+[2025-09-27 06:28:30] Database connection successful
+[2025-09-27 06:28:30] Login data - Email: admin@restaurant.com, Role: admin, Password length: 8
+[2025-09-27 06:28:30] Validation passed, querying database
+[2025-09-27 06:28:30] Query with status column successful
+[2025-09-27 06:28:30] User found - ID: 2, Name: Restaurant Admin
+[2025-09-27 06:28:30] Password verification successful
+[2025-09-27 06:28:30] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[2025-10-02 10:32:35] Login attempt started
+[2025-10-02 10:32:35] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 10:32:35] Database connection successful
+[2025-10-02 10:32:35] Login data - Email: viswaapalanisamy@gmail.com, Role: customer, Password length: 6
+[2025-10-02 10:32:35] Validation passed, querying database
+[2025-10-02 10:32:35] Query with status column successful
+[2025-10-02 10:32:35] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 10:32:35] User exists but with different role: 
+[2025-10-02 10:32:45] Login attempt started
+[2025-10-02 10:32:45] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 10:32:45] Database connection successful
+[2025-10-02 10:32:45] Login data - Email: viswaapalanisamy@gmail.com, Role: admin, Password length: 6
+[2025-10-02 10:32:45] Validation passed, querying database
+[2025-10-02 10:32:45] Query with status column successful
+[2025-10-02 10:32:45] User not found - Email: viswaapalanisamy@gmail.com, Role: admin
+[2025-10-02 10:32:45] User exists but with different role: 
+[2025-10-02 10:33:17] Login attempt started
+[2025-10-02 10:33:17] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 10:33:17] Database connection successful
+[2025-10-02 10:33:17] Login data - Email: viswaapalanisamy@gmail.com, Role: customer, Password length: 6
+[2025-10-02 10:33:17] Validation passed, querying database
+[2025-10-02 10:33:17] Query with status column successful
+[2025-10-02 10:33:17] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 10:33:17] User exists but with different role: 
+[2025-10-02 10:33:38] Login attempt started
+[2025-10-02 10:33:38] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 10:33:38] Database connection successful
+[2025-10-02 10:33:38] Login data - Email: viswaapalanisamy@gmail.com, Role: customer, Password length: 6
+[2025-10-02 10:33:38] Validation passed, querying database
+[2025-10-02 10:33:38] Query with status column successful
+[2025-10-02 10:33:38] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 10:33:38] User exists but with different role: 
+[2025-10-02 10:43:15] Login attempt started
+[2025-10-02 10:43:15] Invalid request method: GET
+[2025-10-02 10:48:44] Login attempt started
+[2025-10-02 10:48:44] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 10:48:44] Database connection successful
+[2025-10-02 10:48:44] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 7
+[2025-10-02 10:48:44] Validation passed, querying database
+[2025-10-02 10:48:44] Query with status column successful
+[2025-10-02 10:48:44] User found - ID: 7, Name: viswaa AP
+[2025-10-02 10:48:44] Password verification failed
+[2025-10-02 10:54:58] Login attempt started
+[2025-10-02 10:54:58] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 10:54:58] Database connection successful
+[2025-10-02 10:54:58] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 10:54:58] Validation passed, querying database
+[2025-10-02 10:54:58] Query with status column successful
+[2025-10-02 10:54:58] User found - ID: 7, Name: viswaa AP
+[2025-10-02 10:54:58] Password verification successful
+[2025-10-02 10:54:58] Database error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_login' in 'field list'
+[2025-10-02 10:56:55] Login attempt started
+[2025-10-02 10:56:55] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 10:56:55] Database connection successful
+[2025-10-02 10:56:55] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 10:56:55] Validation passed, querying database
+[2025-10-02 10:56:55] Query with status column successful
+[2025-10-02 10:56:55] User found - ID: 7, Name: viswaa AP
+[2025-10-02 10:56:55] Password verification successful
+[2025-10-02 10:56:55] Last login column not found, skipping update
+[2025-10-02 10:56:55] Last login updated
+[2025-10-02 10:56:55] Session variables set
+[2025-10-02 10:56:55] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:02:28] Login attempt started
+[2025-10-02 11:02:28] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:02:28] Database connection successful
+[2025-10-02 11:02:28] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:02:28] Validation passed, querying database
+[2025-10-02 11:02:28] Query with status column successful
+[2025-10-02 11:02:28] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:02:29] Password verification successful
+[2025-10-02 11:02:29] Last login column not found, skipping update
+[2025-10-02 11:02:29] Last login updated
+[2025-10-02 11:02:29] Session variables set
+[2025-10-02 11:02:29] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:03:27] Login attempt started
+[2025-10-02 11:03:27] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:03:27] Database connection successful
+[2025-10-02 11:03:27] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 6
+[2025-10-02 11:03:27] Validation passed, querying database
+[2025-10-02 11:03:27] Query with status column successful
+[2025-10-02 11:03:27] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:03:27] Password verification failed
+[2025-10-02 11:04:27] Login attempt started
+[2025-10-02 11:04:27] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:04:27] Database connection successful
+[2025-10-02 11:04:27] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:04:27] Validation passed, querying database
+[2025-10-02 11:04:27] Query with status column successful
+[2025-10-02 11:04:27] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:04:28] Password verification successful
+[2025-10-02 11:04:28] Last login column not found, skipping update
+[2025-10-02 11:04:28] Last login updated
+[2025-10-02 11:04:28] Session variables set
+[2025-10-02 11:04:28] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:04:38] Login attempt started
+[2025-10-02 11:04:38] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:04:38] Database connection successful
+[2025-10-02 11:04:38] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:04:38] Validation passed, querying database
+[2025-10-02 11:04:38] Query with status column successful
+[2025-10-02 11:04:38] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:04:38] Password verification successful
+[2025-10-02 11:04:38] Last login column not found, skipping update
+[2025-10-02 11:04:38] Last login updated
+[2025-10-02 11:04:38] Session variables set
+[2025-10-02 11:04:38] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:05:22] Login attempt started
+[2025-10-02 11:05:22] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:05:22] Database connection successful
+[2025-10-02 11:05:22] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 11
+[2025-10-02 11:05:22] Validation passed, querying database
+[2025-10-02 11:05:22] Query with status column successful
+[2025-10-02 11:05:22] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:05:22] Password verification failed
+[2025-10-02 11:05:25] Login attempt started
+[2025-10-02 11:05:25] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:05:25] Database connection successful
+[2025-10-02 11:05:25] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 11
+[2025-10-02 11:05:25] Validation passed, querying database
+[2025-10-02 11:05:25] Query with status column successful
+[2025-10-02 11:05:25] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:05:25] Password verification failed
+[2025-10-02 11:05:29] Login attempt started
+[2025-10-02 11:05:29] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:05:29] Database connection successful
+[2025-10-02 11:05:29] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 11
+[2025-10-02 11:05:29] Validation passed, querying database
+[2025-10-02 11:05:29] Query with status column successful
+[2025-10-02 11:05:29] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:05:30] Password verification failed
+[2025-10-02 11:05:47] Login attempt started
+[2025-10-02 11:05:47] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:05:47] Database connection successful
+[2025-10-02 11:05:47] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 12
+[2025-10-02 11:05:47] Validation passed, querying database
+[2025-10-02 11:05:47] Query with status column successful
+[2025-10-02 11:05:47] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:05:47] Password verification failed
+[2025-10-02 11:05:57] Login attempt started
+[2025-10-02 11:05:57] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:05:57] Database connection successful
+[2025-10-02 11:05:57] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 12
+[2025-10-02 11:05:57] Validation passed, querying database
+[2025-10-02 11:05:57] Query with status column successful
+[2025-10-02 11:05:57] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:05:57] Password verification failed
+[2025-10-02 11:06:40] Login attempt started
+[2025-10-02 11:06:40] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:06:40] Database connection successful
+[2025-10-02 11:06:40] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:06:40] Validation passed, querying database
+[2025-10-02 11:06:40] Query with status column successful
+[2025-10-02 11:06:40] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:06:41] Password verification successful
+[2025-10-02 11:06:41] Last login column not found, skipping update
+[2025-10-02 11:06:41] Last login updated
+[2025-10-02 11:06:41] Session variables set
+[2025-10-02 11:06:41] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:13:15] Login attempt started
+[2025-10-02 11:13:15] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:13:15] Database connection successful
+[2025-10-02 11:13:15] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:13:15] Validation passed, querying database
+[2025-10-02 11:13:15] Query with status column successful
+[2025-10-02 11:13:15] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:13:15] Password verification successful
+[2025-10-02 11:13:15] Last login column not found, skipping update
+[2025-10-02 11:13:15] Last login updated
+[2025-10-02 11:13:15] Session variables set
+[2025-10-02 11:13:15] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:13:24] Login attempt started
+[2025-10-02 11:13:24] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:13:24] Database connection successful
+[2025-10-02 11:13:24] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:13:24] Validation passed, querying database
+[2025-10-02 11:13:24] Query with status column successful
+[2025-10-02 11:13:24] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:13:24] Password verification successful
+[2025-10-02 11:13:24] Last login column not found, skipping update
+[2025-10-02 11:13:24] Last login updated
+[2025-10-02 11:13:24] Session variables set
+[2025-10-02 11:13:24] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:18:18] Login attempt started
+[2025-10-02 11:18:18] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:18:18] Database connection successful
+[2025-10-02 11:18:18] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:18:18] Validation passed, querying database
+[2025-10-02 11:18:18] Query with status column successful
+[2025-10-02 11:18:18] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:18:18] Password verification successful
+[2025-10-02 11:18:18] Last login column not found, skipping update
+[2025-10-02 11:18:18] Last login updated
+[2025-10-02 11:18:18] Session variables set
+[2025-10-02 11:18:18] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:18:38] Login attempt started
+[2025-10-02 11:18:38] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:18:38] Database connection successful
+[2025-10-02 11:18:38] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:18:38] Validation passed, querying database
+[2025-10-02 11:18:38] Query with status column successful
+[2025-10-02 11:18:38] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:18:38] Password verification successful
+[2025-10-02 11:18:38] Last login column not found, skipping update
+[2025-10-02 11:18:38] Last login updated
+[2025-10-02 11:18:38] Session variables set
+[2025-10-02 11:18:38] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:24:47] Login attempt started
+[2025-10-02 11:24:47] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:24:47] Database connection successful
+[2025-10-02 11:24:47] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 0
+[2025-10-02 11:24:47] Validation failed - missing fields
+[2025-10-02 11:26:06] Login attempt started
+[2025-10-02 11:26:06] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:26:06] Database connection successful
+[2025-10-02 11:26:06] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:26:06] Validation passed, querying database
+[2025-10-02 11:26:06] Query with status column successful
+[2025-10-02 11:26:06] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:26:06] Password verification successful
+[2025-10-02 11:26:06] Last login column not found, skipping update
+[2025-10-02 11:26:06] Last login updated
+[2025-10-02 11:26:06] Session variables set
+[2025-10-02 11:26:06] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:27:28] Login attempt started
+[2025-10-02 11:27:28] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:27:28] Database connection successful
+[2025-10-02 11:27:28] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:27:28] Validation passed, querying database
+[2025-10-02 11:27:28] Query with status column successful
+[2025-10-02 11:27:28] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:27:28] Password verification successful
+[2025-10-02 11:27:28] Last login column not found, skipping update
+[2025-10-02 11:27:28] Last login updated
+[2025-10-02 11:27:28] Session variables set
+[2025-10-02 11:27:28] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:34:54] Login attempt started
+[2025-10-02 11:34:54] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:34:54] Database connection successful
+[2025-10-02 11:34:54] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 11:34:54] Validation passed, querying database
+[2025-10-02 11:34:54] Query with status column successful
+[2025-10-02 11:34:54] User found - ID: 7, Name: viswaa AP
+[2025-10-02 11:34:54] Password verification successful
+[2025-10-02 11:34:54] Last login column not found, skipping update
+[2025-10-02 11:34:54] Last login updated
+[2025-10-02 11:34:54] Session variables set
+[2025-10-02 11:34:54] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 11:37:19] Login attempt started
+[2025-10-02 11:37:19] Invalid request method: GET
+[2025-10-02 11:37:21] Login attempt started
+[2025-10-02 11:37:21] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:37:21] Database connection successful
+[2025-10-02 11:37:21] Login data - Email: '; DROP TABLE users; --, Frontend Role: customer, DB Role: user, Password length: 4
+[2025-10-02 11:37:21] Email validation failed: '; DROP TABLE users; --
+[2025-10-02 11:37:23] Login attempt started
+[2025-10-02 11:37:23] Invalid request method: GET
+[2025-10-02 11:37:34] Login attempt started
+[2025-10-02 11:37:34] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:37:34] Database connection successful
+[2025-10-02 11:37:34] Login data - Email: admin@restaurant.com, Frontend Role: admin, DB Role: admin, Password length: 8
+[2025-10-02 11:37:34] Validation passed, querying database
+[2025-10-02 11:37:34] Query with status column successful
+[2025-10-02 11:37:34] User found - ID: 2, Name: Restaurant Admin
+[2025-10-02 11:37:34] Password verification successful
+[2025-10-02 11:37:34] Last login column not found, skipping update
+[2025-10-02 11:37:34] Last login updated
+[2025-10-02 11:37:34] Session variables set
+[2025-10-02 11:37:34] Login successful for user: admin@restaurant.com
+[2025-10-02 11:37:34] Login attempt started
+[2025-10-02 11:37:34] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:37:34] Database connection successful
+[2025-10-02 11:37:34] Login data - Email: customer@example.com, Frontend Role: customer, DB Role: user, Password length: 11
+[2025-10-02 11:37:34] Validation passed, querying database
+[2025-10-02 11:37:34] Query with status column successful
+[2025-10-02 11:37:34] User not found - Email: customer@example.com, Role: customer
+[2025-10-02 11:37:34] User exists but with different role:  (display as: )
+[2025-10-02 11:37:40] Login attempt started
+[2025-10-02 11:37:40] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:37:40] Database connection successful
+[2025-10-02 11:37:40] Login data - Email: admin@restaurant.com, Frontend Role: admin, DB Role: admin, Password length: 8
+[2025-10-02 11:37:40] Validation passed, querying database
+[2025-10-02 11:37:40] Query with status column successful
+[2025-10-02 11:37:40] User found - ID: 2, Name: Restaurant Admin
+[2025-10-02 11:37:40] Password verification successful
+[2025-10-02 11:37:40] Last login column not found, skipping update
+[2025-10-02 11:37:40] Last login updated
+[2025-10-02 11:37:40] Session variables set
+[2025-10-02 11:37:40] Login successful for user: admin@restaurant.com
+[2025-10-02 11:37:40] Login attempt started
+[2025-10-02 11:37:40] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 11:37:40] Database connection successful
+[2025-10-02 11:37:40] Login data - Email: customer@example.com, Frontend Role: customer, DB Role: user, Password length: 11
+[2025-10-02 11:37:40] Validation passed, querying database
+[2025-10-02 11:37:40] Query with status column successful
+[2025-10-02 11:37:40] User not found - Email: customer@example.com, Role: customer
+[2025-10-02 11:37:40] User exists but with different role:  (display as: )
+[2025-10-02 12:02:01] Login attempt started
+[2025-10-02 12:02:01] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 12:02:01] Database connection successful
+[2025-10-02 12:02:01] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 12:02:01] Validation passed, querying database
+[2025-10-02 12:02:01] Query with status column successful
+[2025-10-02 12:02:01] User found - ID: 7, Name: viswaa AP
+[2025-10-02 12:02:02] Password verification successful
+[2025-10-02 12:02:02] Last login column not found, skipping update
+[2025-10-02 12:02:02] Last login updated
+[2025-10-02 12:02:02] Session variables set
+[2025-10-02 12:02:02] Login successful for user: viswaapalanisamy@gmail.com
+[2025-10-02 16:30:20] Login attempt started
+[2025-10-02 16:30:20] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 16:30:20] Database connection successful
+[2025-10-02 16:30:20] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 8
+[2025-10-02 16:30:20] Validation passed, querying database
+[2025-10-02 16:30:20] Query with status column successful
+[2025-10-02 16:30:20] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 16:30:20] User exists but with different role: customer (display as: customer)
+[2025-10-02 16:30:29] Login attempt started
+[2025-10-02 16:30:29] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 16:30:29] Database connection successful
+[2025-10-02 16:30:29] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 16:30:29] Validation passed, querying database
+[2025-10-02 16:30:29] Query with status column successful
+[2025-10-02 16:30:29] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 16:30:29] User exists but with different role: customer (display as: customer)
+[2025-10-02 16:30:31] Login attempt started
+[2025-10-02 16:30:31] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 16:30:31] Database connection successful
+[2025-10-02 16:30:31] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 16:30:31] Validation passed, querying database
+[2025-10-02 16:30:31] Query with status column successful
+[2025-10-02 16:30:31] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 16:30:31] User exists but with different role: customer (display as: customer)
+[2025-10-02 16:31:23] Login attempt started
+[2025-10-02 16:31:23] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 16:31:23] Database connection successful
+[2025-10-02 16:31:23] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 16:31:23] Validation passed, querying database
+[2025-10-02 16:31:23] Query with status column successful
+[2025-10-02 16:31:23] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 16:31:23] User exists but with different role: customer (display as: customer)
+[2025-10-02 16:31:56] Login attempt started
+[2025-10-02 16:31:56] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 16:31:56] Database connection successful
+[2025-10-02 16:31:56] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 16:31:56] Validation passed, querying database
+[2025-10-02 16:31:56] Query with status column successful
+[2025-10-02 16:31:56] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 16:31:56] User exists but with different role: customer (display as: customer)
+[2025-10-02 16:34:03] Login attempt started
+[2025-10-02 16:34:03] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 16:34:03] Database connection successful
+[2025-10-02 16:34:03] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 16:34:03] Validation passed, querying database
+[2025-10-02 16:34:03] Query with status column successful
+[2025-10-02 16:34:03] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 16:34:03] User exists but with different role: customer (display as: customer)
+[2025-10-02 16:44:53] Login attempt started
+[2025-10-02 16:44:53] Attempting database connection to 127.0.0.1/queue_db
+[2025-10-02 16:44:53] Database connection successful
+[2025-10-02 16:44:53] Login data - Email: viswaapalanisamy@gmail.com, Frontend Role: customer, DB Role: user, Password length: 9
+[2025-10-02 16:44:53] Validation passed, querying database
+[2025-10-02 16:44:53] Query with status column successful
+[2025-10-02 16:44:53] User not found - Email: viswaapalanisamy@gmail.com, Role: customer
+[2025-10-02 16:44:53] User exists but with different role: customer (display as: customer)
