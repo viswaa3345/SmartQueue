@@ -3,19 +3,24 @@ echo "Smart Queue Token Booking System Setup<br><br>";
 
 // Check if XAMPP MySQL is running
 $host = '127.0.0.1';
+$port = '3307';
 $user = 'root';
 $pass = '';
 
 try {
-    $pdo = new PDO("mysql:host=$host", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;port=$port", $user, $pass);
     echo "✓ MySQL connection successful<br>";
     
+    // Rebuild the database to avoid schema drift from older installs
+    $pdo->exec("DROP DATABASE IF EXISTS queue_db");
+    echo "✓ Existing database cleared<br>";
+
     // Try to create database
     $pdo->exec("CREATE DATABASE IF NOT EXISTS queue_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     echo "✓ Database 'queue_db' ready<br>";
     
     // Connect to the database
-    $pdo = new PDO("mysql:host=$host;dbname=queue_db;charset=utf8mb4", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=queue_db;charset=utf8mb4", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "✓ Connected to queue_db<br><br>";
     
@@ -116,10 +121,10 @@ try {
     echo "<strong>Inserting sample data...</strong><br>";
 
     // Insert default admin user
-    $admin_password = password_hash('admin123', PASSWORD_DEFAULT);
+    $admin_password = password_hash('123', PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT IGNORE INTO users (username, password, role, name, email) VALUES (?, ?, 'admin', 'System Administrator', 'admin@queue.com')");
     $stmt->execute(['admin', $admin_password]);
-    echo "✓ Admin user created (admin/admin123)<br>";
+    echo "✓ Admin user created (admin/123)<br>";
 
     // Insert default settings
     $settings = [
@@ -156,7 +161,7 @@ try {
     echo "<div style='background: #d4edda; padding: 15px; border-radius: 5px; border: 1px solid #c3e6cb;'>";
     echo "<strong>✅ Setup completed successfully!</strong><br><br>";
     echo "<strong>Login credentials:</strong><br>";
-    echo "Admin: admin / admin123<br>";
+    echo "Admin: admin / 123<br>";
     echo "Customer: Register a new account<br><br>";
     echo "<a href='../index.html' style='background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Go to Login Page</a>";
     echo "</div>";
@@ -168,7 +173,7 @@ try {
     echo "<strong>Please make sure:</strong><br>";
     echo "1. XAMPP is running<br>";
     echo "2. MySQL/Apache services are started<br>";
-    echo "3. No other applications are using port 3306<br>";
+    echo "3. No other applications are using port 3307<br>";
     echo "</div>";
 }
 ?>

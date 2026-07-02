@@ -89,8 +89,8 @@ try {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )");
 
-    // Insert default admin user (password: admin123)
-    $admin_password = password_hash('admin123', PASSWORD_DEFAULT);
+    // Insert default admin user (password: 123)
+    $admin_password = password_hash('123', PASSWORD_DEFAULT);
     $pdo->exec("INSERT IGNORE INTO users (username, password, role, name, email) VALUES 
         ('admin', '$admin_password', 'admin', 'System Administrator', 'admin@queue.com')");
 
@@ -113,7 +113,7 @@ try {
         ('Caesar Salad', 'Fresh salad with caesar dressing', 8.99, 'Salads', 5)");
 
     echo "Database setup completed successfully!<br>";
-    echo "Default admin login: admin / admin123<br>";
+    echo "Default admin login: admin / 123<br>";
     echo "You can now use the queue system.";
 
 } catch (PDOException $e) {

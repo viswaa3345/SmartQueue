@@ -19,7 +19,7 @@
     <div id="results"></div>
     
     <h2>Test Default Login</h2>
-    <button onclick="testLogin('admin@restaurant.com', 'admin123', 'admin')">Test Admin Login</button>
+    <button onclick="testLogin('admin@queue.com', '123', 'admin')">Test Admin Login</button>
     <button onclick="testLogin('customer@example.com', 'customer123', 'customer')">Test Customer Login</button>
     <button onclick="checkDatabase()">Check Database</button>
     
@@ -41,7 +41,7 @@
             formData.append('password', password);
             formData.append('role', role);
             
-            fetch('simple_login.php', {
+            fetch('auth/login.php', {
                 method: 'POST',
                 body: formData
             })
@@ -57,7 +57,7 @@
                         log(`✅ Login successful for ${email}`, 'success');
                         log(`User data: ${JSON.stringify(data.user)}`, 'success');
                     } else {
-                        log(`❌ Login failed: ${data.message}`, 'error');
+                        log(`❌ Login failed: ${data.message || data.error}`, 'error');
                     }
                 } catch (e) {
                     log(`❌ Failed to parse response as JSON: ${e.message}`, 'error');

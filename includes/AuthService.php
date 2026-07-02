@@ -55,8 +55,8 @@ class AuthService {
         try {
             // Check if user already exists
             $existing = $this->db->fetch(
-                "SELECT id FROM users WHERE email = ?", 
-                [$email]
+                "SELECT id FROM users WHERE email = ? OR username = ?", 
+                [$email, $email]
             );
             
             if ($existing) {
@@ -68,11 +68,12 @@ class AuthService {
             
             // Insert user
             $userData = [
+                'username' => $email,
                 'email' => $email,
                 'password' => $hashedPassword,
                 'name' => $name,
                 'role' => $role,
-                'status' => 'active',
+                'is_active' => 1,
                 'created_at' => date('Y-m-d H:i:s')
             ];
             
@@ -104,22 +105,49 @@ class AuthService {
             return ['success' => false, 'message' => 'Invalid role'];
         }
         
-        // Map frontend role to database role - try both 'customer' and 'user' for customer login
-        $dbRole = $role; // Use the role as-is first
-        
         try {
-            // Get user from database - try both roles for customer login
-            $user = $this->db->fetch(
-                "SELECT * FROM users WHERE email = ? AND role = ? AND status = 'active'", 
-                [$email, $dbRole]
+            $columns = array_map(
+                static fn ($column) => $column['Field'],
+                $this->db->fetchAll('SHOW COLUMNS FROM users')
             );
-            
-            // If not found and role is customer, try 'user' role as fallback
-            if (!$user && $role === 'customer') {
+
+            $hasUsername = in_array('username', $columns, true);
+            $hasIsActive = in_array('is_active', $columns, true);
+            $hasStatus = in_array('status', $columns, true);
+
+            $roleCandidates = [$role];
+            if ($role === 'customer') {
+                $roleCandidates[] = 'user';
+            }
+
+            $user = null;
+
+            foreach ($roleCandidates as $roleCandidate) {
+                $whereParts = ['email = ?'];
+                $params = [$email];
+
+                if ($hasUsername) {
+                    $whereParts[0] = '(email = ? OR username = ?)';
+                    $params[] = $email;
+                }
+
+                $whereParts[] = 'role = ?';
+                $params[] = $roleCandidate;
+
+                if ($hasIsActive) {
+                    $whereParts[] = 'is_active = 1';
+                } elseif ($hasStatus) {
+                    $whereParts[] = "status = 'active'";
+                }
+
                 $user = $this->db->fetch(
-                    "SELECT * FROM users WHERE email = ? AND role = 'user' AND status = 'active'", 
-                    [$email]
+                    'SELECT * FROM users WHERE ' . implode(' AND ', $whereParts),
+                    $params
                 );
+
+                if ($user) {
+                    break;
+                }
             }
             
             if (!$user) {
@@ -133,12 +161,21 @@ class AuthService {
             
             // Update last login - handle missing column gracefully
             try {
-                $this->db->update(
-                    'users', 
-                    ['last_login' => date('Y-m-d H:i:s')],
-                    'id = ?',
-                    [$user['id']]
-                );
+                if (in_array('last_login', $columns, true)) {
+                    $this->db->update(
+                        'users', 
+                        ['last_login' => date('Y-m-d H:i:s')],
+                        'id = ?',
+                        [$user['id']]
+                    );
+                } elseif (in_array('updated_at', $columns, true)) {
+                    $this->db->update(
+                        'users', 
+                        ['updated_at' => date('Y-m-d H:i:s')],
+                        'id = ?',
+                        [$user['id']]
+                    );
+                }
             } catch (Exception $e) {
                 // Ignore if last_login column doesn't exist
                 if (strpos($e->getMessage(), "Unknown column 'last_login'") === false) {

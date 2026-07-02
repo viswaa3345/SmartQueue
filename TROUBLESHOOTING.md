@@ -33,7 +33,7 @@
 3. Check browser console (F12) for any JavaScript errors
 
 ## Default Test Accounts (created during setup):
-- **Admin**: `admin@restaurant.com` / `admin123`
+- **Admin**: `admin@restaurant.com` / `123`
 - **Customer**: `customer@example.com` / `customer123`
 
 ## Files to Check:

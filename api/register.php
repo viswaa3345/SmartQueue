@@ -52,6 +52,10 @@ if (empty($email) && !empty($username)) {
     exit;
 }
 
+if (empty($username)) {
+    $username = strstr($email, '@', true);
+}
+
 // Basic validation
 if (empty($name) || empty($email) || empty($password)) {
     echo json_encode(['success' => false, 'error' => 'Name, email, and password are required']);
@@ -78,6 +82,7 @@ try {
     // Ensure users table has proper structure
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) UNIQUE,
         name VARCHAR(100) NOT NULL,
         email VARCHAR(150) NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -104,19 +109,19 @@ try {
     // Try with all columns first, then fallback step by step
     try {
         // Try with phone and status columns
-        $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, phone, status, created_at) VALUES (?, ?, ?, ?, ?, 'active', NOW())");
-        $stmt->execute([$name, $email, $hashed_password, $role, $phone]);
+        $stmt = $pdo->prepare("INSERT INTO users (username, name, email, password, role, phone, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'active', NOW())");
+        $stmt->execute([$username, $name, $email, $hashed_password, $role, $phone]);
     } catch (PDOException $e) {
         if (strpos($e->getMessage(), "Unknown column 'phone'") !== false) {
             // Try without phone column but with status
             try {
-                $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, status, created_at) VALUES (?, ?, ?, ?, 'active', NOW())");
-                $stmt->execute([$name, $email, $hashed_password, $role]);
+                $stmt = $pdo->prepare("INSERT INTO users (username, name, email, password, role, status, created_at) VALUES (?, ?, ?, ?, ?, 'active', NOW())");
+                $stmt->execute([$username, $name, $email, $hashed_password, $role]);
             } catch (PDOException $e2) {
                 if (strpos($e2->getMessage(), "Unknown column 'status'") !== false) {
                     // Try without both phone and status columns
-                    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, created_at) VALUES (?, ?, ?, ?, NOW())");
-                    $stmt->execute([$name, $email, $hashed_password, $role]);
+                    $stmt = $pdo->prepare("INSERT INTO users (username, name, email, password, role, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+                    $stmt->execute([$username, $name, $email, $hashed_password, $role]);
                 } else {
                     throw $e2;
                 }
@@ -124,13 +129,13 @@ try {
         } elseif (strpos($e->getMessage(), "Unknown column 'status'") !== false) {
             // Try without status column but with phone
             try {
-                $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, phone, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
-                $stmt->execute([$name, $email, $hashed_password, $role, $phone]);
+                $stmt = $pdo->prepare("INSERT INTO users (username, name, email, password, role, phone, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+                $stmt->execute([$username, $name, $email, $hashed_password, $role, $phone]);
             } catch (PDOException $e3) {
                 if (strpos($e3->getMessage(), "Unknown column 'phone'") !== false) {
                     // Try without both phone and status columns
-                    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, created_at) VALUES (?, ?, ?, ?, NOW())");
-                    $stmt->execute([$name, $email, $hashed_password, $role]);
+                    $stmt = $pdo->prepare("INSERT INTO users (username, name, email, password, role, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+                    $stmt->execute([$username, $name, $email, $hashed_password, $role]);
                 } else {
                     throw $e3;
                 }

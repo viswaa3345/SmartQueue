@@ -53,7 +53,7 @@ A complete web-based queue management system for food service establishments wit
 
 ### Admin Access
 - **Username**: admin
-- **Password**: admin123
+- **Password**: 123
 
 ### Customer Access
 - Register a new account using the "Create Account" option on the login page

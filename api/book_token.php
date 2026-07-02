@@ -1,6 +1,7 @@
 <?php
 require_once 'headers.php';
 require_once 'db.php';
+require_once 'auth_helper.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check authentication using session variables from AuthService
@@ -21,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantity = (int)$input['quantity'];
     $latitude = $input['latitude'] ?? null;
     $longitude = $input['longitude'] ?? null;
+    $cart_items = $input['cart_items'] ?? [];
+    $order_summary = trim((string)($input['order_summary'] ?? ''));
+    $order_total = isset($input['order_total']) ? (float)$input['order_total'] : null;
     
     if ($quantity <= 0) {
         echo json_encode(['success' => false, 'error' => 'Invalid quantity']);
@@ -72,6 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $estimated_time = ($queue_position * 5) + $food_item['preparation_time']; // 5 min avg per token + prep time
         
+        // If the client sent a multi-item cart, use the summed quantity for the token.
+        if (is_array($cart_items) && count($cart_items) > 0) {
+            $quantity = array_reduce($cart_items, function ($sum, $item) {
+                return $sum + (int)($item['quantity'] ?? 0);
+            }, 0) ?: $quantity;
+        }
+
         // Insert token
         $stmt = $pdo->prepare("INSERT INTO tokens (token_number, user_id, food_item_id, quantity, estimated_time) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$token_number, $user_id, $food_item_id, $quantity, $estimated_time]);
@@ -85,7 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         // Create notification
-        $message = "Your token {$token_number} has been created. Estimated waiting time: {$estimated_time} minutes.";
+        $orderLabel = $order_summary !== '' ? $order_summary : ($food_item['name'] . ' x ' . $quantity);
+        $message = "Your token {$token_number} has been created for {$orderLabel}. Estimated waiting time: {$estimated_time} minutes.";
+        if ($order_total !== null) {
+            $message .= " Order total: $" . number_format($order_total, 2) . ".";
+        }
         $stmt = $pdo->prepare("INSERT INTO notifications (user_id, token_id, type, message) VALUES (?, ?, 'system', ?)");
         $stmt->execute([$user_id, $token_id, $message]);
         
@@ -99,7 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'estimated_time' => $estimated_time,
                 'queue_position' => $queue_position,
                 'food_item' => $food_item['name'],
-                'quantity' => $quantity
+                'quantity' => $quantity,
+                'order_summary' => $orderLabel,
+                'order_total' => $order_total
             ]
         ]);
         

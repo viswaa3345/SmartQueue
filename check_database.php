@@ -52,6 +52,12 @@ try {
     $result = $stmt->fetch();
     if ($result) {
         echo "✅ Table 'users' exists<br>";
+
+        $columns = [];
+        $columnStmt = $pdo->query("SHOW COLUMNS FROM users");
+        while ($column = $columnStmt->fetch()) {
+            $columns[] = $column['Field'];
+        }
         
         // Check if there are any users
         $stmt = $pdo->query("SELECT COUNT(*) as count FROM users");
@@ -60,16 +66,30 @@ try {
         
         if ($count > 0) {
             echo "<h4>Sample users:</h4>";
-            $stmt = $pdo->query("SELECT id, email, name, role, status FROM users LIMIT 5");
+            $selectFields = ['id'];
+            foreach (['email', 'username', 'name', 'role'] as $field) {
+                if (in_array($field, $columns, true)) {
+                    $selectFields[] = $field;
+                }
+            }
+            if (in_array('status', $columns, true)) {
+                $selectFields[] = 'status';
+            } elseif (in_array('is_active', $columns, true)) {
+                $selectFields[] = 'is_active';
+            }
+
+            $stmt = $pdo->query("SELECT " . implode(', ', $selectFields) . " FROM users LIMIT 5");
             echo "<table border='1' style='border-collapse: collapse;'>";
-            echo "<tr><th>ID</th><th>Email</th><th>Name</th><th>Role</th><th>Status</th></tr>";
+            echo "<tr>";
+            foreach ($selectFields as $field) {
+                echo "<th>" . htmlspecialchars(strtoupper($field)) . "</th>";
+            }
+            echo "</tr>";
             while ($user = $stmt->fetch()) {
                 echo "<tr>";
-                echo "<td>" . htmlspecialchars($user['id']) . "</td>";
-                echo "<td>" . htmlspecialchars($user['email']) . "</td>";
-                echo "<td>" . htmlspecialchars($user['name']) . "</td>";
-                echo "<td>" . htmlspecialchars($user['role']) . "</td>";
-                echo "<td>" . htmlspecialchars($user['status']) . "</td>";
+                foreach ($selectFields as $field) {
+                    echo "<td>" . htmlspecialchars((string)($user[$field] ?? '')) . "</td>";
+                }
                 echo "</tr>";
             }
             echo "</table>";
@@ -84,9 +104,9 @@ try {
 
 echo "<h3>Step 5: Testing a simple query</h3>";
 try {
-    $stmt = $pdo->query("SELECT NOW() as current_time");
+    $stmt = $pdo->query("SELECT NOW() as server_time");
     $result = $stmt->fetch();
-    echo "✅ Database query successful. Current time: " . $result['current_time'] . "<br>";
+    echo "✅ Database query successful. Current time: " . $result['server_time'] . "<br>";
 } catch (PDOException $e) {
     echo "❌ Query test failed: " . $e->getMessage() . "<br>";
 }
